@@ -38,7 +38,9 @@
 
 
 
-
+.font_small{
+  font-size: 13px;
+}
 .logo_div{
   width:300px;
   font-size: 24px;
@@ -48,16 +50,27 @@
   width: 980px;
 }
 
+.content_container{
+  height: 504px;
+}
+.inner_space{
+  letter-spacing: 3px;
+  font-size: 13px;
+
+ 
+}
+.marginal_left{
+  margin-left: 10px;
+}
 
 
 .sidebar_container{
 display:block;
 width:300px;
 box-sizing: border-box;
-height: 87%;
-
+height: 100%;
+background-color: white;
 transition: 0.2s ease-in-out;
-
 }
 
 .eye_toggler{
@@ -70,6 +83,10 @@ transition: 0.2s ease-in-out;
   border-bottom-right-radius:50% ;
   left: 0;
   bottom:50px;
+}
+.furys_eye{
+  color: rgb(162, 162, 162);
+  cursor: pointer;
 }
 
 

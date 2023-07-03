@@ -24,7 +24,7 @@ function App() {
           </div>
         </div>
       </header>
-      <div className='content_container h-75 d-flex w-100'>
+      <div className='content_container   d-flex w-100'>
       <Sidebar/>
       <div className='d-flex content flex-column'>
         <div>I can just continue on with my life</div>
