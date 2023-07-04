@@ -26,6 +26,10 @@
   line-height: 24px;
 }
 
+.maginal_left{
+  margin-left: 10px;
+}
+
 .App {
   text-align: center;
   background-color: #f4f7fd;
@@ -45,11 +49,11 @@
 .logo_div{
   width:300px;
   font-size: 24px;
-  border-right: 1px solid rgb(223, 222, 222);
+  border-right: 1px solid lightgray;
 }
 .board_bar{
   width: 980px;
-  border-bottom: 1px solid lightgray;
+  border-bottom: 1px solid ligghtgray;
 }
 
 .content_container{
@@ -85,9 +89,10 @@ display:block;
 width:300px;
 box-sizing: border-box;
 height: 100%;
-background-color: white;
+
 transition: 0.2s ease-in-out;
 border-right: 1px solid lightgray;
+
 }
 
 .eye_toggler{
@@ -131,7 +136,7 @@ border-right: 1px solid lightgray;
   border-bottom-right-radius: 20px;
   padding-top: 5px;
   padding-bottom: 5px;
-  
+
 }
 
 
@@ -144,3 +149,42 @@ fill: #635fc7;
   width: 980px;
 }
 
+
+.ball{
+  width:15px;
+  height: 15px;
+  background-color: white;
+  position:absolute;
+  top: 2px;
+  left: 2px;
+  border-radius: 50%;
+  transition: transform 0.1s linear;
+  }
+  
+  .togglerLabel{
+    position: relative;
+    width:35px;
+    height:20px;
+    background-color:#635fc7;
+    border-radius: 20px;
+   margin-top: 1px;
+  
+  
+  }
+
+
+  .toggler_container{
+    width: 240px;
+    margin-left: 30px;
+    padding: 10px;
+    margin-bottom: 5px;
+   
+  }
+  .checkbox{
+    display: none;
+  }
+  
+  .checkbox:checked+ .togglerLabel .ball{
+    transform: translateX(15px);
+  }
+  

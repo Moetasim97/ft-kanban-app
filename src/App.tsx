@@ -11,9 +11,12 @@ const App:React.FC =()=>{
   const Theme:boolean=useContext(ThemeContext)
 
   const MainTheme:{backgroundColor:string,color:string}={
-    backgroundColor: Theme? '#f4f7fd':'#28242c',
+    backgroundColor: Theme? '#f4f7fd':'#20212c',
     color: Theme? 'black':'white'
 
+  }
+  const secondaryTheme={
+    backgroundColor:Theme? 'white':'#2b2c37'
   }
   
 
@@ -30,7 +33,7 @@ const App:React.FC =()=>{
       
       <header className="App-header w-100 bg-white">
         <div className='d-flex main-div '>
-          <div className='d-flex logo_div  p-4'>
+          <div className='d-flex logo_div  p-4' style={secondaryTheme}>
             <img  src={logo} alt='Page logo' className='mx-2'/>
             <div className='extraBoldFont '>
               Kanban
@@ -39,7 +42,7 @@ const App:React.FC =()=>{
             fill up the empty space left at the end of any element that lives inside the sidebar in order
             to align with the logo div on screen resize */}
           </div>
-          <div className='d-flex p-2 justify-content-between  board_bar'>
+          <div className='d-flex p-2 justify-content-between  board_bar' style={secondaryTheme}>
             
           </div>
         </div>
