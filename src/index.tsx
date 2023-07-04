@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import {Provider} from "react-redux"
+import store from "./store/store"
+import {ThemeProvider} from './ThemeContext';
 import reportWebVitals from './reportWebVitals';
 // Bootstrap CSS
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -13,7 +16,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <App />
+      <Provider store={store}>
+<ThemeProvider>
+<App/>
+</ThemeProvider>
+</Provider>
   </React.StrictMode>
 );
 

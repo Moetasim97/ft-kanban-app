@@ -1,5 +1,7 @@
 import React from "react"
 import axios from "axios"
+import { retrieve_default_board } from './store/actionCreator';
+import { useDispatch } from 'react-redux';
 
 
 const BASE_URL = 'https://api.trello.com/1/';
@@ -9,13 +11,16 @@ axios.defaults.params = {
   token: 'ATTA7fbe378581b3e3637ee5a033ca163478b5b1a81a54d37e55dc01ad74cdf6284f21132A26',
 };
 
- const createBoard = async() => {
+
+ const retrieveBoardDef = async(string:string) => {
+
+
     try {
-      const response = await axios.get('/boards/64a3d56cd8798e81160132ceee');
+      const response = await axios.get(`/boards/${string}`);
       return response.data;
     } catch (error) {
       throw error
     }
   };
 
-  export {createBoard}
+  export {retrieveBoardDef}

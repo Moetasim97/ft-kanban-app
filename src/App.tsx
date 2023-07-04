@@ -3,7 +3,11 @@ import logo from "./Assets/Group 15.png"
 import './App.css';
 import Sidebar from './Side';
 
-function App() {
+
+
+const App:React.FC =()=>{
+
+ 
 
 
 
@@ -27,7 +31,7 @@ function App() {
           </div>
         </div>
       </header>
-      <div className='content_container   d-flex w-100'>
+      <div className='content_container d-flex w-100'>
       <Sidebar/>
       <div className='d-flex content flex-column'>
         <div>I can just continue on with my life</div>
