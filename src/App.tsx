@@ -15,11 +15,14 @@ function App() {
         <div className='d-flex main-div '>
           <div className='d-flex logo_div  p-4'>
             <img  src={logo} alt='Page logo' className='mx-2'/>
-            <div className='extraBoldFont'>
+            <div className='extraBoldFont '>
               Kanban
             </div>
+            {/* The sidebar is not fully responsive down to the size of a mobile screen because I need to 
+            fill up the empty space left at the end of any element that lives inside the sidebar in order
+            to align with the logo div on screen resize */}
           </div>
-          <div className='d-flex p-2 justify-content-between  board_bar border border-success'>
+          <div className='d-flex p-2 justify-content-between  board_bar'>
             
           </div>
         </div>

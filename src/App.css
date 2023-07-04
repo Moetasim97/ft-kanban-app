@@ -48,10 +48,12 @@
 }
 .board_bar{
   width: 980px;
+  border-bottom: 1px solid lightgray;
 }
 
 .content_container{
   height: 504px;
+
 }
 .inner_space{
   letter-spacing: 3px;
@@ -71,6 +73,7 @@ box-sizing: border-box;
 height: 100%;
 background-color: white;
 transition: 0.2s ease-in-out;
+border-right: 1px solid lightgray;
 }
 
 .eye_toggler{
@@ -88,5 +91,37 @@ transition: 0.2s ease-in-out;
   color: rgb(162, 162, 162);
   cursor: pointer;
 }
+.text_color{
+  color: #635fc7;
+}
+.plus_dims{
+  width:8px;
+  height:8px;
 
+  margin-left: 5px;
+  margin-right: 2px;
+}
+
+.boardSplit{
+ 
+  width: 20px;
+  height: 20px;
+}
+
+.modal_trigger{
+  cursor: pointer;
+  color: gray;
+  fill: gray;
+  margin: 5px;
+
+
+}
+.modal_trigger:hover{
+color: #635fc7;
+fill: #635fc7;
+}
+
+.content{
+  width: 980px;
+}
 
