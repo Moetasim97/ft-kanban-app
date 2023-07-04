@@ -1,18 +1,31 @@
 import React from 'react';
-import logo from "./Assets/Group 15.png"
+import {useContext} from "react"
+ import logo from "./Assets/Group 15.png"
 import './App.css';
 import Sidebar from './Side';
+import {ThemeContext} from "./ThemeContext"
 
 
 
 const App:React.FC =()=>{
+  const Theme:boolean=useContext(ThemeContext)
+
+  const MainTheme:{backgroundColor:string,color:string}={
+    backgroundColor: Theme? '#f4f7fd':'#28242c',
+    color: Theme? 'black':'white'
+
+  }
+  
+
+
+
 
  
 
 
 
   return (
-    <div className="App">
+    <div className="App" style={MainTheme}>
       
       
       <header className="App-header w-100 bg-white">

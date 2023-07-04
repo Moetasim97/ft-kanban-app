@@ -1,12 +1,17 @@
-import React,{Dispatch} from "react"
+import React,{Dispatch, SetStateAction} from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye,faEyeSlash,faPlus } from "@fortawesome/free-solid-svg-icons"
 import {retrieveBoardDef} from "./TrelloApis"
 import { retrieve_default_board } from './store/actionCreator';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
+import { AnotherContext } from "./ThemeContext";
+import { ThemeContext } from "./ThemeContext";
+import { useContext } from "react";
 
 const Sidebar:React.FC=()=>{
+    const themeSetter:Dispatch<SetStateAction<boolean>>=useContext(AnotherContext)
+    const Theme:boolean=useContext(ThemeContext)
     const [state,setState]=React.useState<boolean>(false)
     const toggle_self=()=> setState((prevstate)=>prevstate=!prevstate)
     const dispatch=useDispatch()
@@ -61,6 +66,9 @@ const Sidebar:React.FC=()=>{
             <FontAwesomeIcon icon={faEyeSlash} className="furys_eye mx-2" />
             <div className="boldFont font_small text-secondary ">Hide Sidebar</div>
             </div>
+            <button onClick={()=>{
+                themeSetter(Theme)
+            }}>just a trial</button>
     </div>
     </div>
     : 
