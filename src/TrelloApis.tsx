@@ -1,7 +1,7 @@
 import React from "react"
 import axios from "axios"
 
-import { useDispatch } from 'react-redux';
+
 
 
 const BASE_URL = 'https://api.trello.com/1/';
@@ -26,7 +26,7 @@ axios.defaults.params = {
   const createBoard=async(string:string)=>{
     try{
       const response=await axios.post(`/boards/?name=${string}`)
-      console.log(response.data)
+      
       return response.data
       
     }

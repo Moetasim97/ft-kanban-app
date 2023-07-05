@@ -2,7 +2,7 @@ import React,{Dispatch, SetStateAction, useEffect, useRef} from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye,faEyeSlash,faPlus } from "@fortawesome/free-solid-svg-icons"
 import {retrieveAllBoards} from "./TrelloApis"
-import { retrieve_boardNames,retrieve_current_board} from './store/actionCreator';
+import { retrieve_boardNames,retrieve_current_board,addBoard} from './store/actionCreator';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { AnotherContext } from "./ThemeContext";
@@ -21,8 +21,18 @@ const Sidebar:React.FC=()=>{
   //Defining the submithandler that will retrieve the data of the boardcreator input field
   const onSubmit:SubmitHandler<FormValues>=(data)=>{
     const text=data.fieldName
-    createBoard(text)
+    const BoardCreate=async()=>{
+      try{
+        const board= await createBoard(text)
+        dispatch(addBoard(allBoards,board))
+      }
+      catch(error){
+        throw error
+      }
+    }
+    BoardCreate()
     console.log(data)
+    console.log(allBoards)
   }
     const themeSetter:Dispatch<SetStateAction<boolean>>=useContext(AnotherContext)
     const Theme:boolean=useContext(ThemeContext)
@@ -114,7 +124,7 @@ const Sidebar:React.FC=()=>{
                   </div>
 
                   <button className="boardButtons mt-4 boldFont font_medium" onClick={()=>{
-                    // createBoard()
+              
                    
                     const inputTar=inputRef.current
                     if(inputTar)

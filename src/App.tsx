@@ -9,6 +9,7 @@ import { Dispatch } from 'react';
 import { useDispatch } from 'react-redux';
 import {calculate_boardsNo,retrieve_current_board,retrieve_initial_boards} from "./store/actionCreator"
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useEffect } from 'react';
 import { retrieveAllBoards } from './TrelloApis';
@@ -25,6 +26,8 @@ const App:React.FC =()=>{
   const retrieved_board=useSelector((store:any)=>store.kanBanReducer.current_board_data)
   const [firstmodalState,setModal]=React.useState<boolean>(false)
   const [secondModalState,setSecondModal]=React.useState<boolean>(false)
+  const [thirdModalState,setThirdModal]=React.useState<boolean>(false)
+  const [fourthModalState,setFourthModal]=React.useState<boolean>(false)
   
 
 
@@ -35,6 +38,14 @@ const App:React.FC =()=>{
   const toggleSecondModal=()=>{
 
     setSecondModal((prevModal)=>prevModal=!prevModal)
+  }
+  const toggleThirdModal=()=>{
+
+    setThirdModal((prevModal)=>prevModal=!prevModal)
+  }
+  
+  const toggleFourthModal=()=>{
+    setFourthModal((prevModal)=>prevModal=!prevModal)
   }
 
 
@@ -66,7 +77,7 @@ const App:React.FC =()=>{
       try {
           const newBoards = await retrieveAllBoards();
           
-        dispatch(retrieve_initial_boards(newBoards))
+          dispatch(retrieve_initial_boards(newBoards))
         
           
         } catch (error:any) {
@@ -132,7 +143,38 @@ const App:React.FC =()=>{
                   <FontAwesomeIcon icon={faPlus} className="text-white small_plus" />
                   Add New Task
                   </button>
+                  <FontAwesomeIcon icon={faEllipsisVertical} className='text-secondary elipsis  mx-2 px-2' onClick={toggleThirdModal}/>
               </div>
+                  {thirdModalState? 
+                  <div className='boardSettings d-flex flex-column align-items-start'>
+                    <div className='settingsElement'>Edit Board</div>
+                    <div className='text-danger settingsElement' onClick={toggleFourthModal}>Delete Board</div>
+                    
+                  </div>:
+                  <div className='d-none'></div>}
+
+                      {fourthModalState?
+                      <div className='modal_overlay' >
+                      <div className='d-flex flex-column deleteModal align-items-start  '>
+                      <div className='text-danger boldFont font_medium mb-2'>
+                        Delete this board?
+                      </div>
+                      <p className='text-secondary font_small small_paragraph pb-2 pt-2' >Are you sure you want to delete the '{retrieved_board.name}' board? This
+                      action will remove all columnns and tasks and cannot be reversed.</p>
+                      <div className='d-flex mb-1'>
+                        <button className='deleteBtn mediumFont font_small'>
+                        Delete
+                        </button>
+                        <button className='cancelButton mediumFont font_small' onClick={toggleFourthModal}>
+                        Cancel
+                        </button>
+                      </div>
+                      </div>
+                    </div>:
+                    <div className='d-none'></div>
+                    }
+                    
+            
            <Modal isOpen={firstmodalState} onClose={toggleFirstModal}>
             <h2>Hi this is the first iteration</h2>
            </Modal>
