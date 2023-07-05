@@ -37,6 +37,9 @@
   height: 100%;
 }
 
+.large_font{
+  font-size: 24px;
+}
 .main-div{
   width: 100%;
 }
@@ -46,6 +49,13 @@
 .font_small{
   font-size: 13px;
 }
+.font_medium{
+  font-size: 15px;
+}
+.font_large{
+  font-size: 18px;
+}
+
 .logo_div{
   width:300px;
   font-size: 24px;
@@ -53,7 +63,7 @@
 }
 .board_bar{
   width: 980px;
-  border-bottom: 1px solid ligghtgray;
+  border-bottom: 1px solid lightgray;
 }
 
 .content_container{
@@ -89,10 +99,37 @@ display:block;
 width:300px;
 box-sizing: border-box;
 height: 100%;
-
-transition: 0.2s ease-in-out;
 border-right: 1px solid lightgray;
 
+transition: 0.2s ease-in-out;
+
+
+}
+
+.board_title{
+  background-color: inherit;
+
+
+  margin-left: 10px;
+
+}
+
+.boardTitle_container{
+  padding-top: 8px;
+  padding-bottom: 8px;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+  color: gray;
+  fill: gray;
+  width: 280px;
+  cursor: pointer;
+
+}
+
+.boardTitle_container:hover{
+  background-color: #635fc7;
+  color: white;
+  fill: white;
 }
 
 .eye_toggler{
@@ -187,4 +224,77 @@ fill: #635fc7;
   .checkbox:checked+ .togglerLabel .ball{
     transform: translateX(15px);
   }
+
+  .logo_button_style{
+    background-color: #635fc7;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin: 0;
+    border: 0;
+    border-radius:25px;
+    
+  }
   
+  .small_plus{
+    width: 11px;
+    height: 11px;
+  }
+
+  .modal_overlay{
+    background-color: rgba(196, 192, 192, 0.7);
+    position: fixed;
+    height:100%;
+    width:100%;
+    z-index: 10;
+    top:0;
+    left:0
+  }
+
+  .modal_content{
+    background-color: white;
+    width:480px;
+    height:fit-content;
+    position: absolute;
+    top:20%;
+    left:380px;
+    border-radius: 5px;
+    padding:10px;
+    z-index: 100;
+  }
+
+  .content_wrapper{
+    position: relative;
+  }
+
+  .special_style{
+    font-size: 18px;
+  }
+
+  .custom_input{
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    height: 40px;
+    width: 416px;
+    padding: 5px;
+  }
+
+  input::placeholder{
+    font-size: 14px;
+
+  }
+
+  .boardButtons{
+    border-radius: 25px;
+    background-color: #d8d7f1;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin: 0;
+    border: 0;
+    width:416px;
+    color: #635fc7;
+
+  }

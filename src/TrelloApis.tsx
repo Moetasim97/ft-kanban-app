@@ -1,6 +1,6 @@
 import React from "react"
 import axios from "axios"
-import { retrieve_default_board } from './store/actionCreator';
+
 import { useDispatch } from 'react-redux';
 
 
@@ -12,15 +12,28 @@ axios.defaults.params = {
 };
 
 
- const retrieveBoardDef = async(string:string) => {
+ const retrieveAllBoards = async() => {
 
 
     try {
-      const response = await axios.get(`/boards/${string}`);
+      const response = await axios.get(`members/me/boards`);
       return response.data;
     } catch (error) {
       throw error
     }
   };
 
-  export {retrieveBoardDef}
+  const createBoard=async(string:string)=>{
+    try{
+      const response=await axios.post(`/boards/?name=${string}`)
+      console.log(response.data)
+      return response.data
+      
+    }
+    catch(error)
+    {
+      throw error
+    }
+  }
+
+  export {retrieveAllBoards,createBoard}

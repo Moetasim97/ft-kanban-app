@@ -1,15 +1,29 @@
-import React,{Dispatch, SetStateAction} from "react"
+import React,{Dispatch, SetStateAction, useEffect, useRef} from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye,faEyeSlash,faPlus } from "@fortawesome/free-solid-svg-icons"
-import {retrieveBoardDef} from "./TrelloApis"
-import { retrieve_default_board } from './store/actionCreator';
+import {retrieveAllBoards} from "./TrelloApis"
+import { retrieve_boardNames,retrieve_current_board} from './store/actionCreator';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { AnotherContext } from "./ThemeContext";
 import { ThemeContext } from "./ThemeContext";
 import { useContext } from "react";
+import Modal from "./Modal";
+import { createBoard } from "./TrelloApis";
+import {useForm,SubmitHandler} from "react-hook-form"
 
+
+type FormValues={
+  fieldName:string
+}
 const Sidebar:React.FC=()=>{
+  const {register,handleSubmit}=useForm<FormValues>()
+  //Defining the submithandler that will retrieve the data of the boardcreator input field
+  const onSubmit:SubmitHandler<FormValues>=(data)=>{
+    const text=data.fieldName
+    createBoard(text)
+    console.log(data)
+  }
     const themeSetter:Dispatch<SetStateAction<boolean>>=useContext(AnotherContext)
     const Theme:boolean=useContext(ThemeContext)
     const primaryTheme={
@@ -21,22 +35,25 @@ const Sidebar:React.FC=()=>{
     const [state,setState]=React.useState<boolean>(false)
     const toggle_self=()=> setState((prevstate)=>prevstate=!prevstate)
     const dispatch=useDispatch()
-    const defBoard=useSelector((store:any)=>store.kanBanReducer.current_board)
 
-
-
-
-
-    const getDefBoard= async (defBoard:string)=>{
-        try {
-            const newBoard = await retrieveBoardDef(defBoard);
-            dispatch(retrieve_default_board())
-            console.log('Created board:',newBoard);
-          } catch (error:any) {
-            console.log( error.message);
-          }
-
+    const board_no=useSelector((store:any)=>store.kanBanReducer.board_no)
+    const names_of_boards=useSelector((store:any)=>store.kanBanReducer.boards_names)
+    const allBoards=useSelector((store:any)=>store.kanBanReducer.all_boards)
+    const [boardModal,setBoardModal]=React.useState<boolean>(false)
+    const inputRef=useRef<HTMLInputElement>(null)
+    const toggleBoardModal=()=>{
+     
+      setBoardModal((prevModal)=>prevModal=!prevModal)
     }
+
+
+    useEffect(()=>{
+      dispatch(retrieve_boardNames(allBoards))
+    },[allBoards])
+
+
+
+    
 
     
 
@@ -48,23 +65,71 @@ const Sidebar:React.FC=()=>{
         <div className="d-flex flex-column justify-content-between h-100 pb-3 pt-1">
        <div className="d-flex flex-column">
        <div className="d-flex w-100 justify-content-start align-items-baseline padding_left">
-       <div className="mediumFont text-secondary inner_space ">
+       <div className="mediumFont text-secondary inner_space mb-3 ">
             All Boards
             </div>
-            <div className="text-secondary font_small">( {0} )</div>
+           
+            <div className="text-secondary font_small">( {board_no} )</div>
              </div>
+             {names_of_boards? names_of_boards.map((nam:string)=>{
+              return(
+                <div className="d-flex boardTitle_container align-items-center padding_left" onClick={(e)=>{
+                 const targ=e.target as HTMLDivElement
+                 const targText=targ.textContent;
+                 console.log(targText)
+                  dispatch(retrieve_current_board(targText,allBoards))
+                }}>
+                      <svg  viewBox="0 0 24 24" className="boardSplit" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3 6.25C3 4.45507 4.45507 3 6.25 3H17.75C19.5449 3 21 4.45507 21 6.25V17.75C21 19.5449 19.5449 21 17.75 21H6.25C4.45507 21 3 19.5449 3 17.75V6.25ZM4.5 12.5V17.75C4.5 18.7165 5.2835 19.5 6.25 19.5H14V12.5L4.5 12.5ZM14 11V4.5H6.25C5.2835 4.5 4.5 5.2835 4.5 6.25V11L14 11ZM19.5 9.5H15.5V14.5H19.5V9.5ZM19.5 16H15.5V19.5H17.75C18.7165 19.5 19.5 18.7165 19.5 17.75V16ZM19.5 8V6.25C19.5 5.2835 18.7165 4.5 17.75 4.5H15.5V8L19.5 8Z"/>
+                      </svg>
+                      <div className="board_title font_small boldFont">{nam}</div>
+                </div>
+          
+              )
+          
+             }):
+              <div className="text-secondary">No available boards</div>           
+               }
              <div className="d-flex align-items-center modal_trigger padding_left">
              <svg  viewBox="0 0 24 24" className="boardSplit" xmlns="http://www.w3.org/2000/svg">
             <path d="M3 6.25C3 4.45507 4.45507 3 6.25 3H17.75C19.5449 3 21 4.45507 21 6.25V17.75C21 19.5449 19.5449 21 17.75 21H6.25C4.45507 21 3 19.5449 3 17.75V6.25ZM4.5 12.5V17.75C4.5 18.7165 5.2835 19.5 6.25 19.5H14V12.5L4.5 12.5ZM14 11V4.5H6.25C5.2835 4.5 4.5 5.2835 4.5 6.25V11L14 11ZM19.5 9.5H15.5V14.5H19.5V9.5ZM19.5 16H15.5V19.5H17.75C18.7165 19.5 19.5 18.7165 19.5 17.75V16ZM19.5 8V6.25C19.5 5.2835 18.7165 4.5 17.75 4.5H15.5V8L19.5 8Z"/>
             </svg>
             <FontAwesomeIcon icon={faPlus} className="plus_dims" />
-            <div className=" boldFont font_small" onClick={()=>{
-      
-               getDefBoard(defBoard)
-        
-            }}>Create New Board</div>
+            <div className=" boldFont font_small" onClick={toggleBoardModal}>Create New Board</div>
             </div>
        </div>
+       {/* here is the modal that will add a new board */}
+       <Modal isOpen={boardModal} onClose={toggleBoardModal}>
+               <div className="d-flex flex-column align-items-start pt-2 pb-2 padding_left">
+                <p className="boldFont special_style font_small">Add new board</p>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                  <div className="d-flex flex-column align-items-start">
+                  <label htmlFor="inputField" className="text-secondary font_small mediumFont mb-1">Name</label>
+                <input type="text" id="inputField"  className="custom_input" placeholder="e.g. Web Design"   {...register( "fieldName",{required:"The full name is required",minLength:{value:10,message:"Minimum length should be at least 10 characters"}})}/>
+                <p className="text-secondary mt-4 mediumFont font_small">Columns</p>
+                <button className="boardButtons boldFont font_medium">
+                <FontAwesomeIcon icon={faPlus} className=" mb-1 plus_dims " />
+                Add New Column</button>
+                
+                  </div>
+
+                  <button className="boardButtons mt-4 boldFont font_medium" onClick={()=>{
+                    // createBoard()
+                   
+                    const inputTar=inputRef.current
+                    if(inputTar)
+                    {
+                      console.log(inputTar.value)
+                    }
+                 
+                  }}>
+                    Create New Board
+                  </button>
+               
+                 
+                </form>
+               </div>
+            </Modal>
         <div className="d-flex flex-column">
         <div className='d-flex  toggler_container justify-content-center marginal_left' style={secondaryTheme}>
       <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="gray" className="bi bi-brightness-high mt-1" viewBox="0 0 16 16">
