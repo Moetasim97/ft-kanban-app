@@ -2,7 +2,7 @@ import React,{Dispatch, SetStateAction, useEffect, useRef} from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye,faEyeSlash,faPlus } from "@fortawesome/free-solid-svg-icons"
 import {retrieveAllBoards} from "./TrelloApis"
-import { retrieve_boardNames,retrieve_current_board,addBoard} from './store/actionCreator';
+import { retrieve_boardNames,retrieve_current_board,addBoard, retrieve_initial_boards} from './store/actionCreator';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { AnotherContext } from "./ThemeContext";
@@ -24,7 +24,8 @@ const Sidebar:React.FC=()=>{
     const BoardCreate=async()=>{
       try{
         const board= await createBoard(text)
-        dispatch(addBoard(allBoards,board))
+        const newerBoards=await retrieveAllBoards()
+        dispatch(retrieve_initial_boards(newerBoards))
       }
       catch(error){
         throw error
@@ -117,7 +118,10 @@ const Sidebar:React.FC=()=>{
                   <label htmlFor="inputField" className="text-secondary font_small mediumFont mb-1">Name</label>
                 <input type="text" id="inputField"  className="custom_input" placeholder="e.g. Web Design"   {...register( "fieldName",{required:"The full name is required",minLength:{value:10,message:"Minimum length should be at least 10 characters"}})}/>
                 <p className="text-secondary mt-4 mediumFont font_small">Columns</p>
-                <button className="boardButtons boldFont font_medium">
+                <button className="boardButtons boldFont font_medium" onClick={(e)=>{
+                  e.preventDefault()
+                
+                }}>
                 <FontAwesomeIcon icon={faPlus} className=" mb-1 plus_dims " />
                 Add New Column</button>
                 

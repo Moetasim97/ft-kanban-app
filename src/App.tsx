@@ -7,14 +7,15 @@ import {ThemeContext} from "./ThemeContext"
 import {  useSelector } from 'react-redux/es/hooks/useSelector';
 import { Dispatch } from 'react';
 import { useDispatch } from 'react-redux';
-import {calculate_boardsNo,retrieve_current_board,retrieve_initial_boards} from "./store/actionCreator"
+import {calculate_boardsNo,retrieve_current_board,retrieve_initial_boards,BoardDel,afterDeletion} from "./store/actionCreator"
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useEffect } from 'react';
-import { retrieveAllBoards } from './TrelloApis';
+import { retrieveAllBoards,deleteBoard } from './TrelloApis';
 import { useRef } from 'react';
 import Modal from './Modal';
+import { FontawesomeObject } from '@fortawesome/fontawesome-svg-core';
 
 
 
@@ -28,6 +29,7 @@ const App:React.FC =()=>{
   const [secondModalState,setSecondModal]=React.useState<boolean>(false)
   const [thirdModalState,setThirdModal]=React.useState<boolean>(false)
   const [fourthModalState,setFourthModal]=React.useState<boolean>(false)
+  const [randomState,randomToggler]=React.useState<boolean>(false)
   
 
 
@@ -47,13 +49,18 @@ const App:React.FC =()=>{
   const toggleFourthModal=()=>{
     setFourthModal((prevModal)=>prevModal=!prevModal)
   }
+  const doSomething=()=>{
+    randomToggler((prevState)=>prevState=!prevState)
+  }
 
 
   const taskBtnRef=useRef<HTMLButtonElement>(null)
 
+
+
   var btn_elem=taskBtnRef.current
 
-  if(btn_elem!=null && Object.keys(retrieved_board).length==0){
+  if(btn_elem!=null && Object.keys(retrieved_board).length<3){
     btn_elem.disabled=true
     btn_elem.style.backgroundColor="#d8d7f1"
   }
@@ -135,6 +142,7 @@ const App:React.FC =()=>{
         
               <div className='boldFont large_font'>
               {retrieved_board.name?retrieved_board.name:""}
+              {console.log(retrieved_board)}
               </div>
               <div>
                   <button className='logo_button_style boldFont font_small text-white' ref={taskBtnRef} onClick={(e)=>{
@@ -143,7 +151,15 @@ const App:React.FC =()=>{
                   <FontAwesomeIcon icon={faPlus} className="text-white small_plus" />
                   Add New Task
                   </button>
-                  <FontAwesomeIcon icon={faEllipsisVertical} className='text-secondary elipsis  mx-2 px-2' onClick={toggleThirdModal}/>
+                  <FontAwesomeIcon icon={faEllipsisVertical}  className='text-secondary elipsis  mx-2 px-2' onClick={(e)=>{
+                   debugger;
+                    if(Object.keys(retrieved_board).length<3){
+                      return null
+                    }
+                    else{
+                      toggleThirdModal()
+                    }
+                  }}/>
               </div>
                   {thirdModalState? 
                   <div className='boardSettings d-flex flex-column align-items-start'>
@@ -162,7 +178,26 @@ const App:React.FC =()=>{
                       <p className='text-secondary font_small small_paragraph pb-2 pt-2' >Are you sure you want to delete the '{retrieved_board.name}' board? This
                       action will remove all columnns and tasks and cannot be reversed.</p>
                       <div className='d-flex mb-1'>
-                        <button className='deleteBtn mediumFont font_small'>
+                        <button className='deleteBtn mediumFont font_small' onClick={()=>{
+                          toggleFourthModal()
+                          const DeleteThisBoard=async ()=>{
+                            try{
+                              debugger;
+                              const deletion=await deleteBoard(retrieved_board.id)
+                              const newerBoards=await retrieveAllBoards()
+                              dispatch(retrieve_initial_boards(newerBoards))
+                              dispatch(afterDeletion(newerBoards))
+                              doSomething()
+                              console.log("boardsgettingdeleted")
+                            }
+                            catch(error)
+                            {
+                              throw error
+                            }
+                    
+                          }
+                          DeleteThisBoard()
+                        }}>
                         Delete
                         </button>
                         <button className='cancelButton mediumFont font_small' onClick={toggleFourthModal}>
@@ -186,10 +221,7 @@ const App:React.FC =()=>{
       <div className='d-flex content flex-column'>
         <div>I can just continue on with my life</div>
         <div>this is too easy</div>
-        <button onClick={toggleSecondModal}>another modal Opener</button>
-        <Modal isOpen={secondModalState} onClose={toggleSecondModal}>
-          <div>say hello to my little friend</div>
-        </Modal>
+  
       </div>
 
       </div>
@@ -200,3 +232,9 @@ const App:React.FC =()=>{
 }
 
 export default App;
+
+
+{/* I'll need this modal later*/}
+{/* <Modal isOpen={secondModalState} onClose={toggleSecondModal}>
+<div>say hello to my little friend</div>
+</Modal> */}

@@ -1,4 +1,3 @@
-import React from "react"
 import axios from "axios"
 
 
@@ -19,7 +18,7 @@ axios.defaults.params = {
       const response = await axios.get(`members/me/boards`);
       return response.data;
     } catch (error) {
-      throw error
+    console.log("The error is in the retrieveallboards",error)
     }
   };
 
@@ -36,4 +35,18 @@ axios.defaults.params = {
     }
   }
 
-  export {retrieveAllBoards,createBoard}
+
+  const deleteBoard=async(string:string)=>{
+    
+    try{
+      const response=await axios.delete(`/boards/${string}`)
+      
+      return response.data
+      
+    }
+    catch(error)
+    {
+      throw error
+    }
+  }
+  export {retrieveAllBoards,createBoard,deleteBoard}
