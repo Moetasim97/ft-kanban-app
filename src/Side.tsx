@@ -15,6 +15,8 @@ import {useForm,SubmitHandler} from "react-hook-form"
 
 type FormValues={
   fieldName:string
+  
+  
 }
 const Sidebar:React.FC=()=>{
   const {register,handleSubmit,formState:{errors}}=useForm<FormValues>()
@@ -22,6 +24,8 @@ const Sidebar:React.FC=()=>{
   //Defining the submithandler that will retrieve the data of the boardcreator input field
   const onSubmit:SubmitHandler<FormValues>=(data)=>{
     const text=data.fieldName
+  
+   
     const BoardCreate=async()=>{
       try{
         const board= await createBoard(text)
@@ -33,8 +37,7 @@ const Sidebar:React.FC=()=>{
       }
     }
     BoardCreate()
-    console.log(data)
-    console.log(allBoards)
+    
   }
     const themeSetter:Dispatch<SetStateAction<boolean>>=useContext(AnotherContext)
     const Theme:boolean=useContext(ThemeContext)
@@ -60,6 +63,7 @@ const Sidebar:React.FC=()=>{
     const [boardModal,setBoardModal]=React.useState<boolean>(false)
     const inputRef=useRef<HTMLInputElement>(null)
     const [genericArray,incrementArray]=React.useState<null[]>([])
+    const boardCreator=useRef<HTMLButtonElement>(null)
     
     const toggleBoardModal=()=>{
      
@@ -98,7 +102,7 @@ const Sidebar:React.FC=()=>{
                 <div className="d-flex boardTitle_container align-items-center padding_left" onClick={(e)=>{
                  const targ=e.target as HTMLDivElement
                  const targText=targ.textContent;
-                 console.log(targText)
+                
                   dispatch(retrieve_current_board(targText,allBoards))
                 }}>
                       <svg  viewBox="0 0 24 24" className="boardSplit" xmlns="http://www.w3.org/2000/svg">
@@ -135,7 +139,27 @@ const Sidebar:React.FC=()=>{
                  genericArray.map((input)=>{
                   return(
                     <div className="d-flex align-items-baseline">
-                      <input type="text" id="columnBoardInput" className="columnInp"></input>
+                      <input type="text" id="columnBoardInput" className="columnInp"  onBlur={(e)=>{
+                        const stringPattern=/^[a-zA-Z]+$/
+                        const creatorButton=boardCreator.current
+                    if(!stringPattern.test(e.target.value)){
+               
+                     if(creatorButton!=null){
+                      creatorButton.disabled=true
+                      creatorButton.style.backgroundColor='gray'
+                     }
+                  
+                    }
+                    else{
+                
+                      if(creatorButton!=null){
+                        creatorButton.disabled=false
+                        creatorButton.style.backgroundColor='#635fc7'
+                      }
+                  
+                    }
+                        
+                      }}></input>
                       <FontAwesomeIcon icon={faTimes} className="closingTimes" onClick={()=>{
                         var array=[...genericArray]
                         array.pop()
@@ -159,7 +183,7 @@ const Sidebar:React.FC=()=>{
                 
                   </div>
 
-                  <button className="boardButtons mt-4 boldFont font_medium" onClick={()=>{
+                  <button className="boardButtons mt-4 boldFont font_medium" ref={boardCreator} onClick={()=>{
               
                    
                     const inputTar=inputRef.current

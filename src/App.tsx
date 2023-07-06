@@ -142,7 +142,7 @@ const App:React.FC =()=>{
         
               <div className='boldFont large_font'>
               {retrieved_board.name?retrieved_board.name:""}
-              {console.log(retrieved_board)}
+           
               </div>
               <div>
                   <button className='logo_button_style boldFont font_small text-white' ref={taskBtnRef} onClick={(e)=>{
@@ -152,7 +152,7 @@ const App:React.FC =()=>{
                   Add New Task
                   </button>
                   <FontAwesomeIcon icon={faEllipsisVertical}  className='text-secondary elipsis  mx-2 px-2' onClick={(e)=>{
-                   debugger;
+                  
                     if(Object.keys(retrieved_board).length<3){
                       return null
                     }
