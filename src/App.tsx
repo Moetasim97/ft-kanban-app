@@ -15,7 +15,7 @@ import { useEffect } from 'react';
 import { retrieveAllBoards,deleteBoard } from './TrelloApis';
 import { useRef } from 'react';
 import Modal from './Modal';
-import { FontawesomeObject } from '@fortawesome/fontawesome-svg-core';
+
 
 
 
@@ -162,8 +162,8 @@ const App:React.FC =()=>{
                   }}/>
               </div>
                   {thirdModalState? 
-                  <div className='boardSettings d-flex flex-column align-items-start'>
-                    <div className='settingsElement'>Edit Board</div>
+                  <div className='boardSettings d-flex flex-column align-items-start' style={secondaryTheme}>
+                    <div className='settingsElement text-secondary'>Edit Board</div>
                     <div className='text-danger settingsElement' onClick={toggleFourthModal}>Delete Board</div>
                     
                   </div>:
@@ -218,7 +218,7 @@ const App:React.FC =()=>{
       </header>
       <div className='content_container d-flex w-100'>
       <Sidebar/>
-      <div className='d-flex content flex-column'>
+      <div className='d-flex content flex-column align-items-start'>
         <div>I can just continue on with my life</div>
         <div>this is too easy</div>
   

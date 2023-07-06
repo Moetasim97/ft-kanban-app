@@ -1,6 +1,6 @@
-import React,{Dispatch, SetStateAction, useEffect, useRef} from "react"
+import React,{Dispatch, SetStateAction, useEffect, useRef, useState} from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEye,faEyeSlash,faPlus } from "@fortawesome/free-solid-svg-icons"
+import { faEye,faEyeSlash,faPlus,faTimes } from "@fortawesome/free-solid-svg-icons"
 import {retrieveAllBoards} from "./TrelloApis"
 import { retrieve_boardNames,retrieve_current_board,addBoard, retrieve_initial_boards} from './store/actionCreator';
 import { useDispatch } from 'react-redux';
@@ -9,7 +9,7 @@ import { AnotherContext } from "./ThemeContext";
 import { ThemeContext } from "./ThemeContext";
 import { useContext } from "react";
 import Modal from "./Modal";
-import { createBoard } from "./TrelloApis";
+import { createBoard,createList } from "./TrelloApis";
 import {useForm,SubmitHandler} from "react-hook-form"
 
 
@@ -17,7 +17,8 @@ type FormValues={
   fieldName:string
 }
 const Sidebar:React.FC=()=>{
-  const {register,handleSubmit}=useForm<FormValues>()
+  const {register,handleSubmit,formState:{errors}}=useForm<FormValues>()
+  
   //Defining the submithandler that will retrieve the data of the boardcreator input field
   const onSubmit:SubmitHandler<FormValues>=(data)=>{
     const text=data.fieldName
@@ -43,6 +44,12 @@ const Sidebar:React.FC=()=>{
     const secondaryTheme={
        backgroundColor:Theme ? '#f4f7fd':'#20212c'
      }
+    const inputTheme={
+      backgroundColor:Theme? 'white':'#20212c'
+    }
+     const buttonTheme={
+      backgroundColor:Theme? '#d8d7f1':'white'
+     }
     const [state,setState]=React.useState<boolean>(false)
     const toggle_self=()=> setState((prevstate)=>prevstate=!prevstate)
     const dispatch=useDispatch()
@@ -52,6 +59,8 @@ const Sidebar:React.FC=()=>{
     const allBoards=useSelector((store:any)=>store.kanBanReducer.all_boards)
     const [boardModal,setBoardModal]=React.useState<boolean>(false)
     const inputRef=useRef<HTMLInputElement>(null)
+    const [genericArray,incrementArray]=React.useState<null[]>([])
+    
     const toggleBoardModal=()=>{
      
       setBoardModal((prevModal)=>prevModal=!prevModal)
@@ -63,6 +72,8 @@ const Sidebar:React.FC=()=>{
     },[allBoards])
 
 
+
+    
 
     
 
@@ -110,17 +121,38 @@ const Sidebar:React.FC=()=>{
             </div>
        </div>
        {/* here is the modal that will add a new board */}
-       <Modal isOpen={boardModal} onClose={toggleBoardModal}>
+       <Modal isOpen={boardModal} onClose={toggleBoardModal} >
                <div className="d-flex flex-column align-items-start pt-2 pb-2 padding_left">
                 <p className="boldFont special_style font_small">Add new board</p>
                 <form onSubmit={handleSubmit(onSubmit)}>
                   <div className="d-flex flex-column align-items-start">
                   <label htmlFor="inputField" className="text-secondary font_small mediumFont mb-1">Name</label>
-                <input type="text" id="inputField"  className="custom_input" placeholder="e.g. Web Design"   {...register( "fieldName",{required:"The full name is required",minLength:{value:10,message:"Minimum length should be at least 10 characters"}})}/>
-                <p className="text-secondary mt-4 mediumFont font_small">Columns</p>
-                <button className="boardButtons boldFont font_medium" onClick={(e)=>{
+                  
+                <input type="text" id="inputField"  className="custom_input" style={inputTheme} placeholder="e.g. Web Design"   {...register( "fieldName",{required:"A full word is required",minLength:{value:5,message:"Minimum length should be at least 5 characters"}})}/>
+                {errors.fieldName?<label htmlFor="inputField" className="errorLabel" >{errors.fieldName.message}</label>:<div className="d-none"></div>}
+                <p className="text-secondary mt-4 mediumFont mb-0 font_small">Columns</p>
+                {genericArray.length>0?
+                 genericArray.map((input)=>{
+                  return(
+                    <div className="d-flex align-items-baseline">
+                      <input type="text" id="columnBoardInput" className="columnInp"></input>
+                      <FontAwesomeIcon icon={faTimes} className="closingTimes" onClick={()=>{
+                        var array=[...genericArray]
+                        array.pop()
+                        incrementArray(array)
+                      }}/>
+                    </div>)
+                }):
+                  
+                  // 
+                <div className="d-none"></div>
+                }
+                <button className="boardButtons  boldFont font_medium" id="special_treatment" style={buttonTheme} onClick={(e)=>{
                   e.preventDefault()
-                
+                  var array=[...genericArray]
+                  array.push(null)
+                  incrementArray((prevState=>array))
+                  console.log(genericArray.length)
                 }}>
                 <FontAwesomeIcon icon={faPlus} className=" mb-1 plus_dims " />
                 Add New Column</button>

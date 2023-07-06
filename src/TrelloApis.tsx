@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios, { AxiosHeaders, AxiosRequestConfig } from "axios"
 
 
 
@@ -49,4 +49,24 @@ axios.defaults.params = {
       throw error
     }
   }
-  export {retrieveAllBoards,createBoard,deleteBoard}
+
+
+  const headers:AxiosRequestConfig={
+    headers:{
+      "Accept":'application/json'
+    }
+  }
+
+  const createList= async(boardId:string,listName:string)=>{
+    try{
+      const response= await axios.post(`/boards/${boardId}/lists?name=${listName}`,headers)
+
+      return response.data
+    }
+    catch(error){
+      throw error
+    }
+  }
+
+
+  export {retrieveAllBoards,createBoard,deleteBoard,createList}

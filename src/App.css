@@ -146,10 +146,16 @@ transition: 0.2s ease-in-out;
   left: 0;
   bottom:50px;
 }
+.eye_toggler:hover{
+  background-color: #d8d7f1;
+}
+
 .furys_eye{
   color: rgb(162, 162, 162);
   cursor: pointer;
 }
+
+
 .text_color{
   color: #635fc7;
 }
@@ -276,11 +282,33 @@ fill: #635fc7;
   }
 
   .custom_input{
-    border: 1px solid lightgray;
+   border: 1px solid lightslategray;
     border-radius: 5px;
     height: 40px;
     width: 416px;
     padding: 5px;
+  }
+
+  .columnInp{
+    border: 1px solid lightslategray;
+    border-radius: 5px;
+    height: 40px;
+    width: 375px;
+    padding: 5px;
+    margin: 3px;
+  }
+
+  .closingTimes{
+    width: 20px;
+    height: 20px;
+    color: gray;
+    cursor: pointer;
+  }
+
+  .errorLabel{
+    font-size: 10px;
+    color: orangered;
+    font-style: italic;
   }
 
   input::placeholder{
@@ -290,7 +318,7 @@ fill: #635fc7;
 
   .boardButtons{
     border-radius: 25px;
-    background-color: #d8d7f1;
+    background-color:#635fc7;
     padding-top: 10px;
     padding-bottom: 10px;
     padding-left: 15px;
@@ -298,13 +326,17 @@ fill: #635fc7;
     margin: 0;
     border: 0;
     width:416px;
-    color: #635fc7;
+    color: white;
+  
+  }
 
+  #special_treatment{
+
+    color:#635fc7;
   }
 
 .boardSettings{
   position: absolute;
-  background-color: white;
   top:70px;
   padding: 10px;
   border-radius: 10px;
