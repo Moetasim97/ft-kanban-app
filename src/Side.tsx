@@ -11,6 +11,7 @@ import { useContext } from "react";
 import Modal from "./Modal";
 import { createBoard,createList } from "./TrelloApis";
 import {useForm,SubmitHandler} from "react-hook-form"
+import { toHaveTextContent } from "@testing-library/jest-dom/matchers";
 
 
 type FormValues={
@@ -24,7 +25,14 @@ const Sidebar:React.FC=()=>{
   //Defining the submithandler that will retrieve the data of the boardcreator input field
   const onSubmit:SubmitHandler<FormValues>=(data)=>{
     const text=data.fieldName
+
+    const columnInputs=document.querySelectorAll(".columnInp")
+    const inputArrays=Array.from(columnInputs)
+ inputArrays.map((input)=>{
+  console.log(input.nodeValue)
+ })
   
+    
    
     const BoardCreate=async()=>{
       try{
@@ -54,21 +62,39 @@ const Sidebar:React.FC=()=>{
       backgroundColor:Theme? '#d8d7f1':'white'
      }
     const [state,setState]=React.useState<boolean>(false)
+    const [inputStyle,styleSetter]=useState<boolean>(true)
     const toggle_self=()=> setState((prevstate)=>prevstate=!prevstate)
     const dispatch=useDispatch()
 
     const board_no=useSelector((store:any)=>store.kanBanReducer.board_no)
     const names_of_boards=useSelector((store:any)=>store.kanBanReducer.boards_names)
     const allBoards=useSelector((store:any)=>store.kanBanReducer.all_boards)
-    const [boardModal,setBoardModal]=React.useState<boolean>(false)
+    const [boardModal,setBoardModal]=React.useState<boolean>(true)
     const inputRef=useRef<HTMLInputElement>(null)
-    const [genericArray,incrementArray]=React.useState<null[]>([])
+   
     const boardCreator=useRef<HTMLButtonElement>(null)
+
+    // This next bit of code I'm going to handle the add column functionality with it
+    const refsArray=useRef<Array<React.RefObject<HTMLInputElement>>>([])
+    const [displaytoggler,setToggler]=React.useState<boolean>(false)
+
+
+    const addRef=()=>{
+      refsArray.current.push(React.createRef<HTMLInputElement>())
+    }
+
     
     const toggleBoardModal=()=>{
      
       setBoardModal((prevModal)=>prevModal=!prevModal)
     }
+
+    const styleInput={
+      border:!inputStyle ? "1px solid orangered":"1px solid lightslategray",
+      backgroundImage:!inputStyle ? `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='fit-content' width='fit-content'><text x='270' y='25' fill='orangered' font-size='15'>Can't be empty</text></svg>")`:'none'
+    }
+
+  
 
 
     useEffect(()=>{
@@ -135,18 +161,20 @@ const Sidebar:React.FC=()=>{
                 <input type="text" id="inputField"  className="custom_input" style={inputTheme} placeholder="e.g. Web Design"   {...register( "fieldName",{required:"A full word is required",minLength:{value:5,message:"Minimum length should be at least 5 characters"}})}/>
                 {errors.fieldName?<label htmlFor="inputField" className="errorLabel" >{errors.fieldName.message}</label>:<div className="d-none"></div>}
                 <p className="text-secondary mt-4 mediumFont mb-0 font_small">Columns</p>
-                {genericArray.length>0?
-                 genericArray.map((input)=>{
+                {refsArray.current.length>0?
+                 refsArray.current.map((input)=>{
                   return(
+                    <>
                     <div className="d-flex align-items-baseline">
-                      <input type="text" id="columnBoardInput" className="columnInp"  onBlur={(e)=>{
+                      <input type="text" id="columnBoardInput" className="columnInp" style={styleInput} ref={input} onBlur={(e)=>{
                         const stringPattern=/^[a-zA-Z]+$/
                         const creatorButton=boardCreator.current
                     if(!stringPattern.test(e.target.value)){
                
                      if(creatorButton!=null){
                       creatorButton.disabled=true
-                      creatorButton.style.backgroundColor='gray'
+                      creatorButton.style.backgroundColor='#f0effa'
+                      
                      }
                   
                     }
@@ -155,17 +183,20 @@ const Sidebar:React.FC=()=>{
                       if(creatorButton!=null){
                         creatorButton.disabled=false
                         creatorButton.style.backgroundColor='#635fc7'
+                       
                       }
                   
                     }
                         
                       }}></input>
+                     
                       <FontAwesomeIcon icon={faTimes} className="closingTimes" onClick={()=>{
-                        var array=[...genericArray]
-                        array.pop()
-                        incrementArray(array)
+                    refsArray.current.pop()
+                    setToggler(!displaytoggler)
                       }}/>
-                    </div>)
+                    </div>
+                     {input? console.log(input):<div className="d-none"></div>}
+                   </>)
                 }):
                   
                   // 
@@ -173,10 +204,9 @@ const Sidebar:React.FC=()=>{
                 }
                 <button className="boardButtons  boldFont font_medium" id="special_treatment" style={buttonTheme} onClick={(e)=>{
                   e.preventDefault()
-                  var array=[...genericArray]
-                  array.push(null)
-                  incrementArray((prevState=>array))
-                  console.log(genericArray.length)
+                   addRef()
+                   setToggler(!displaytoggler)
+                 
                 }}>
                 <FontAwesomeIcon icon={faPlus} className=" mb-1 plus_dims " />
                 Add New Column</button>
