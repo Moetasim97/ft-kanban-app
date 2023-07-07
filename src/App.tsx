@@ -113,7 +113,7 @@ const App:React.FC =()=>{
 
 
 
-  console.log(board_no)
+  
   
 
 
@@ -188,7 +188,7 @@ const App:React.FC =()=>{
                               dispatch(retrieve_initial_boards(newerBoards))
                               dispatch(afterDeletion(newerBoards))
                               doSomething()
-                              console.log("boardsgettingdeleted")
+                          
                             }
                             catch(error)
                             {

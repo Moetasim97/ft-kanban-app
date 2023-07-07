@@ -22,11 +22,14 @@ axios.defaults.params = {
     }
   };
 
+
+
   const createBoard=async(string:string)=>{
     try{
       const response=await axios.post(`/boards/?name=${string}`)
-      
-      return response.data
+      const AfterResponse=await axios.get(`/board/${response.data.id}`)
+      console.log(AfterResponse.data)
+      return AfterResponse.data
       
     }
     catch(error)
@@ -61,6 +64,7 @@ axios.defaults.params = {
     try{
       const response= await axios.post(`/boards/${boardId}/lists?name=${listName}`,headers)
 
+      console.log(response.data)
       return response.data
     }
     catch(error){

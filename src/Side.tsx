@@ -21,30 +21,38 @@ type FormValues={
 }
 const Sidebar:React.FC=()=>{
   const {register,handleSubmit,formState:{errors}}=useForm<FormValues>()
-  
+  var refValues: any[]=[];
   //Defining the submithandler that will retrieve the data of the boardcreator input field
   const onSubmit:SubmitHandler<FormValues>=(data)=>{
+    for (var i=0;i<refsArray.current.length;i++){
+      refValues.push(refsArray.current[i].current?.value)
+    }
+
+
+   
     const text=data.fieldName
 
-    const columnInputs=document.querySelectorAll(".columnInp")
-    const inputArrays=Array.from(columnInputs)
- inputArrays.map((input)=>{
-  console.log(input.nodeValue)
- })
-  
     
-   
+  //  ##################################################################################################
+  // ######################################################
+  // I want to retrieve a board here
     const BoardCreate=async()=>{
       try{
         const board= await createBoard(text)
         const newerBoards=await retrieveAllBoards()
         dispatch(retrieve_initial_boards(newerBoards))
+        dispatch(retrieve_current_board(text,newerBoards))
+          refValues.length>0?refValues.map((value,key)=>{
+            createList(board.id,value)
+          }):console.log("There are no lists to append")
       }
       catch(error){
         throw error
       }
     }
     BoardCreate()
+
+    
     
   }
     const themeSetter:Dispatch<SetStateAction<boolean>>=useContext(AnotherContext)
@@ -166,36 +174,14 @@ const Sidebar:React.FC=()=>{
                   return(
                     <>
                     <div className="d-flex align-items-baseline">
-                      <input type="text" id="columnBoardInput" className="columnInp" style={styleInput} ref={input} onBlur={(e)=>{
-                        const stringPattern=/^[a-zA-Z]+$/
-                        const creatorButton=boardCreator.current
-                    if(!stringPattern.test(e.target.value)){
-               
-                     if(creatorButton!=null){
-                      creatorButton.disabled=true
-                      creatorButton.style.backgroundColor='#f0effa'
-                      
-                     }
-                  
-                    }
-                    else{
-                
-                      if(creatorButton!=null){
-                        creatorButton.disabled=false
-                        creatorButton.style.backgroundColor='#635fc7'
-                       
-                      }
-                  
-                    }
-                        
-                      }}></input>
+                      <input type="text" id="columnBoardInput" className="columnInp"  ref={input}></input>
                      
                       <FontAwesomeIcon icon={faTimes} className="closingTimes" onClick={()=>{
                     refsArray.current.pop()
                     setToggler(!displaytoggler)
                       }}/>
                     </div>
-                     {input? console.log(input):<div className="d-none"></div>}
+                     {/* {input? console.log(input):<div className="d-none"></div>} */}
                    </>)
                 }):
                   
@@ -267,6 +253,28 @@ const Sidebar:React.FC=()=>{
       
     </>)
 }
+
+
+// const stringPattern=/^[a-zA-Z]+$/
+//                         const creatorButton=boardCreator.current
+//                     if(!stringPattern.test(e.target.value)){
+               
+//                      if(creatorButton!=null){
+//                       creatorButton.disabled=true
+//                       creatorButton.style.backgroundColor='#f0effa'
+                      
+//                      }
+                  
+//                     }
+//                     else{
+                
+//                       if(creatorButton!=null){
+//                         creatorButton.disabled=false
+//                         creatorButton.style.backgroundColor='#635fc7'
+                       
+//                       }
+                  
+//                     }
 
 
 
