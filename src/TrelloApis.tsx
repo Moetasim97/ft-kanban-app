@@ -64,7 +64,7 @@ axios.defaults.params = {
     try{
       const response= await axios.post(`/boards/${boardId}/lists?name=${listName}`,headers)
 
-      console.log(response.data)
+     
       return response.data
     }
     catch(error){
@@ -72,5 +72,20 @@ axios.defaults.params = {
     }
   }
 
+  const retrieveBoardLists= async (boardId:string)=>{
+    try{
+      const response= await axios.get(`/boards/${boardId}/lists?`,headers)
+      
+      return response.data
+    }
+    catch(error){
+      throw error
+    }
 
-  export {retrieveAllBoards,createBoard,deleteBoard,createList}
+  
+  
+  }
+  
+
+
+  export {retrieveAllBoards,createBoard,deleteBoard,createList,retrieveBoardLists}

@@ -6,11 +6,12 @@ type actionParams={
 }
 
 const initialState:{boards_names:string[],current_board:object,board_no:number,current_board_data:any
-,all_boards:any[]}={
+,all_boards:any[],currentBoardColumns:any[]}={
 
     boards_names:[],
     all_boards:[],
     current_board:{},
+    currentBoardColumns:[],
     current_board_data:{},
     board_no:0
 }
@@ -47,6 +48,9 @@ const initialState:{boards_names:string[],current_board:object,board_no:number,c
 
     return {...state,current_board_data:action.payload}
 
+    case "Retrieve columns of the current Board":
+
+    return {...state,currentBoardColumns:action.payload}
 
 
     default :

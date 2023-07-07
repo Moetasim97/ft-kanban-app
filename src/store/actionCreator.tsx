@@ -49,7 +49,7 @@ const calculate_boardsNo=(array:any[])=>{
 const retrieve_current_board=(name:string | null,array:any[])=>{
 
     var single_board={}
-    console.log(array)
+ 
     for (var i=0;i<array.length++;i++){
         
             if(array[i].name==name)
@@ -89,6 +89,13 @@ const BoardDel=(array:any[],string:string)=>{
 
 }
 
+const getBoardColumns=(array:any[])=>{
+
+
+return {type:"Retrieve columns of the current Board",payload:array}
+
+}
+
 
 // export const initialAction = (array:any[]) => {
 //     return (dispatch:any) => {
@@ -106,4 +113,4 @@ const BoardDel=(array:any[],string:string)=>{
 
 
 
-export {calculate_boardsNo,retrieve_current_board,retrieve_initial_boards,retrieve_boardNames,addBoard,BoardDel,afterDeletion}
+export {calculate_boardsNo,retrieve_current_board,retrieve_initial_boards,retrieve_boardNames,addBoard,BoardDel,afterDeletion,getBoardColumns}

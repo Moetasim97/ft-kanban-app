@@ -249,6 +249,7 @@ fill: #635fc7;
   .small_plus{
     width: 11px;
     height: 11px;
+    margin-bottom: 1px;
   }
 
   .modal_overlay{
@@ -282,7 +283,7 @@ fill: #635fc7;
   }
 
   .custom_input{
-   border: 1px solid lightslategray;
+   border: 1px solid lightgray;
     border-radius: 5px;
     height: 40px;
     width: 416px;
@@ -393,4 +394,10 @@ fill: #635fc7;
   width: 200px; 
   padding-top: 10px;
   padding-bottom: 10px;
+}
+
+
+.special_margins{
+  margin-left: 300px;
+  margin-top: 150px;
 }

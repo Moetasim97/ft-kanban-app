@@ -1,8 +1,8 @@
 import React,{Dispatch, SetStateAction, useEffect, useRef, useState} from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye,faEyeSlash,faPlus,faTimes } from "@fortawesome/free-solid-svg-icons"
-import {retrieveAllBoards} from "./TrelloApis"
-import { retrieve_boardNames,retrieve_current_board,addBoard, retrieve_initial_boards} from './store/actionCreator';
+import {retrieveAllBoards, retrieveBoardLists} from "./TrelloApis"
+import { retrieve_boardNames,retrieve_current_board,addBoard, retrieve_initial_boards,getBoardColumns} from './store/actionCreator';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
 import { AnotherContext } from "./ThemeContext";
@@ -42,17 +42,22 @@ const Sidebar:React.FC=()=>{
         const newerBoards=await retrieveAllBoards()
         dispatch(retrieve_initial_boards(newerBoards))
         dispatch(retrieve_current_board(text,newerBoards))
-          refValues.length>0?refValues.map((value,key)=>{
-            createList(board.id,value)
-          }):console.log("There are no lists to append")
+        refValues.length>0?refValues.map((value,key)=>{
+        createList(board.id,value)
+        
+        }):console.log("There are no lists to append")
+
+      
+      
       }
       catch(error){
         throw error
       }
     }
     BoardCreate()
-
-    
+   
+ 
+    toggleBoardModal()
     
   }
     const themeSetter:Dispatch<SetStateAction<boolean>>=useContext(AnotherContext)
@@ -79,6 +84,7 @@ const Sidebar:React.FC=()=>{
     const allBoards=useSelector((store:any)=>store.kanBanReducer.all_boards)
     const [boardModal,setBoardModal]=React.useState<boolean>(true)
     const inputRef=useRef<HTMLInputElement>(null)
+    const currentBoard=useSelector((store:any)=>store.kanBanReducer.current_board)
    
     const boardCreator=useRef<HTMLButtonElement>(null)
 

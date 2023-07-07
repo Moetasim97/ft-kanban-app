@@ -7,14 +7,15 @@ import {ThemeContext} from "./ThemeContext"
 import {  useSelector } from 'react-redux/es/hooks/useSelector';
 import { Dispatch } from 'react';
 import { useDispatch } from 'react-redux';
-import {calculate_boardsNo,retrieve_current_board,retrieve_initial_boards,BoardDel,afterDeletion} from "./store/actionCreator"
+import {calculate_boardsNo,retrieve_current_board,retrieve_initial_boards,BoardDel,afterDeletion,getBoardColumns} from "./store/actionCreator"
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useEffect } from 'react';
-import { retrieveAllBoards,deleteBoard } from './TrelloApis';
+import { retrieveAllBoards,deleteBoard,retrieveBoardLists } from './TrelloApis';
 import { useRef } from 'react';
 import Modal from './Modal';
+import BoardData from './boardData';
 
 
 
@@ -30,7 +31,10 @@ const App:React.FC =()=>{
   const [thirdModalState,setThirdModal]=React.useState<boolean>(false)
   const [fourthModalState,setFourthModal]=React.useState<boolean>(false)
   const [randomState,randomToggler]=React.useState<boolean>(false)
-  
+  const [fifthModalState,setFifthModal]=React.useState<boolean>(false)
+  const editBoardRef=useRef<HTMLInputElement>(null)
+
+ 
 
 
   const toggleFirstModal=()=>{
@@ -49,6 +53,11 @@ const App:React.FC =()=>{
   const toggleFourthModal=()=>{
     setFourthModal((prevModal)=>prevModal=!prevModal)
   }
+
+  const toggleFifthModal=()=>{
+    setFifthModal((prevModal)=>prevModal=!prevModal)
+  }
+
   const doSomething=()=>{
     randomToggler((prevState)=>prevState=!prevState)
   }
@@ -70,7 +79,12 @@ const App:React.FC =()=>{
   }
 
 
+ 
+
   const Theme:boolean=useContext(ThemeContext)
+  const buttonTheme={
+    backgroundColor: Theme? '#d8d7f1':'white'
+   }
   const MainTheme:{backgroundColor:string,color:string}={
     backgroundColor: Theme? '#f4f7fd':'#20212c',
     color: Theme? 'black':'white'
@@ -121,7 +135,9 @@ const App:React.FC =()=>{
 
  
 
-
+const lists=retrieveBoardLists(retrieved_board.id)
+  console.log(retrieved_board.id,lists)
+// dispatch(getBoardColumns(lists))
 
   return (
     <div className="App" style={MainTheme}>
@@ -163,7 +179,7 @@ const App:React.FC =()=>{
               </div>
                   {thirdModalState? 
                   <div className='boardSettings d-flex flex-column align-items-start' style={secondaryTheme}>
-                    <div className='settingsElement text-secondary'>Edit Board</div>
+                    <div className='settingsElement text-secondary' onClick={toggleFifthModal}>Edit Board</div>
                     <div className='text-danger settingsElement' onClick={toggleFourthModal}>Delete Board</div>
                     
                   </div>:
@@ -213,15 +229,31 @@ const App:React.FC =()=>{
            <Modal isOpen={firstmodalState} onClose={toggleFirstModal}>
             <h2>Hi this is the first iteration</h2>
            </Modal>
+           <Modal isOpen={fifthModalState} onClose={toggleFifthModal}>
+            <div className='d-flex flex-column p-3 align-items-start'>
+              <div className='boldFont medium_font mb-3'>Edit Board</div>
+              <label htmlFor='editBoardInput' className='text-secondary mx-1 mb-1 font_small boldFont' >Board Name</label>
+              <input type='text' id='editBoardInput' className='boardEdit mb-3 custom_input' placeholder={retrieved_board.name} ref={editBoardRef}></input>
+              <label htmlFor='anotherColInput' className='text-secondary  mx-1 font_small boldFont'>Board Columns</label>
+              <button className="boardButtons boldFont mb-4" id="special_treatment" style={buttonTheme}>
+              <FontAwesomeIcon icon={faPlus} className="  small_plus "/>
+              Add New Column
+              </button>
+              <button className="boardButtons mediumFont" id="" onClick={()=>{
+                retrieveBoardLists(retrieved_board.id)
+                }}>
+                    Save Changes
+              </button>
+            </div>
+           </Modal>
+
           </div>
         </div>
       </header>
       <div className='content_container d-flex w-100'>
       <Sidebar/>
       <div className='d-flex content flex-column align-items-start'>
-        <div>I can just continue on with my life</div>
-        <div>this is too easy</div>
-  
+        <BoardData/>
       </div>
 
       </div>
