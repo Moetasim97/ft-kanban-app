@@ -5,7 +5,12 @@ import kanBanReducer from "./ReducerCollection"
 
 
 
+
+
+
 const middleware = [thunk];
+
+ 
 
 const store=createStore(
     combineReducers({kanBanReducer}),

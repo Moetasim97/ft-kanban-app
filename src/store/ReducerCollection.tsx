@@ -1,4 +1,4 @@
-
+import { isDoStatement } from "typescript"
 
 type actionParams={
     type:string,
@@ -6,8 +6,9 @@ type actionParams={
 }
 
 const initialState:{boards_names:string[],current_board:object,board_no:number,current_board_data:any
-,all_boards:any[],currentBoardColumns:any[]}={
+,all_boards:any[],currentBoardColumns:any[],boardStatus:string}={
 
+    boardStatus:"",
     boards_names:[],
     all_boards:[],
     current_board:{},
@@ -40,6 +41,25 @@ const initialState:{boards_names:string[],current_board:object,board_no:number,c
     case "Add Board":
     return {...state,all_boards:action.payload}
 
+    case "Board Created Successfully":
+
+    return {...state,current_board:action.payload}
+
+    case "Will retrieve lists":
+      return {...state}
+
+    case "Default list deleted":
+
+    return {...state}
+
+    case "No default lists found":
+
+    return {...state,currentBoardColumns:[]}
+
+    case "Lists after reseting":
+
+    return {...state,currentBoardColumns:action.payload}
+
     case "Board Deleted":
       
     return {...state,all_boards:action.payload}
@@ -51,6 +71,10 @@ const initialState:{boards_names:string[],current_board:object,board_no:number,c
     case "Retrieve columns of the current Board":
 
     return {...state,currentBoardColumns:action.payload}
+
+    case "Error creating Board":
+
+    return {...state,boardStatus:action.payload}
 
 
     default :

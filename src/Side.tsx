@@ -1,7 +1,7 @@
 import React,{Dispatch, SetStateAction, useEffect, useRef, useState} from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye,faEyeSlash,faPlus,faTimes } from "@fortawesome/free-solid-svg-icons"
-import {retrieveAllBoards, retrieveBoardLists} from "./TrelloApis"
+import {retrieveAllBoards, retrieveBoardLists, moveList, deleteBoard} from "./TrelloApis"
 import { retrieve_boardNames,retrieve_current_board,addBoard, retrieve_initial_boards,getBoardColumns} from './store/actionCreator';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux/es/hooks/useSelector';
@@ -16,17 +16,22 @@ import { toHaveTextContent } from "@testing-library/jest-dom/matchers";
 
 type FormValues={
   fieldName:string
-  
-  
 }
+
+// This function is going to handle the submit of the add new board modal
 const Sidebar:React.FC=()=>{
+
+  const currentBoardCols=useSelector((store:any)=>store.kanBanReducer.currentBoardCols)
   const {register,handleSubmit,formState:{errors}}=useForm<FormValues>()
   var refValues: any[]=[];
   //Defining the submithandler that will retrieve the data of the boardcreator input field
   const onSubmit:SubmitHandler<FormValues>=(data)=>{
-    for (var i=0;i<refsArray.current.length;i++){
-      refValues.push(refsArray.current[i].current?.value)
-    }
+
+    
+    // for (var i=0;i<refsArray.current.length;i++){
+    //   refValues.push(refsArray.current[i].current?.value)
+    //   console.log(refsArray.current[i])
+    // }
 
 
    
@@ -39,13 +44,30 @@ const Sidebar:React.FC=()=>{
     const BoardCreate=async()=>{
       try{
         const board= await createBoard(text)
+        
+        const lists= await retrieveBoardLists(board.id)
+        lists.map(async (list:any,key:number)=>{
+          const backUpBoard=await createBoard("backup")
+          const mvList =await moveList(list.id,backUpBoard.id)
+          const deleteBackup=await deleteBoard(backUpBoard.id)
+          console.log("default list deleted")
+        }
+        )
+       
+
+  
+        
+        
         const newerBoards=await retrieveAllBoards()
+       
         dispatch(retrieve_initial_boards(newerBoards))
         dispatch(retrieve_current_board(text,newerBoards))
-        refValues.length>0?refValues.map((value,key)=>{
-        createList(board.id,value)
         
-        }):console.log("There are no lists to append")
+      
+        // refValues.length>0?refValues.map((value,key)=>{
+        // createList(board.id,value)
+        
+        // }):console.log("There are no lists to append")
 
       
       
@@ -74,15 +96,15 @@ const Sidebar:React.FC=()=>{
      const buttonTheme={
       backgroundColor:Theme? '#d8d7f1':'white'
      }
-    const [state,setState]=React.useState<boolean>(false)
+    const [state,setOriginalState]=React.useState<boolean>(false)
     const [inputStyle,styleSetter]=useState<boolean>(true)
-    const toggle_self=()=> setState((prevstate)=>prevstate=!prevstate)
+    const toggle_self=()=> setOriginalState(!state)
     const dispatch=useDispatch()
 
     const board_no=useSelector((store:any)=>store.kanBanReducer.board_no)
     const names_of_boards=useSelector((store:any)=>store.kanBanReducer.boards_names)
     const allBoards=useSelector((store:any)=>store.kanBanReducer.all_boards)
-    const [boardModal,setBoardModal]=React.useState<boolean>(true)
+    const [boardModal,setBoardModal]=React.useState<boolean>(false)
     const inputRef=useRef<HTMLInputElement>(null)
     const currentBoard=useSelector((store:any)=>store.kanBanReducer.current_board)
    
@@ -95,6 +117,7 @@ const Sidebar:React.FC=()=>{
 
     const addRef=()=>{
       refsArray.current.push(React.createRef<HTMLInputElement>())
+     
     }
 
     
@@ -113,6 +136,7 @@ const Sidebar:React.FC=()=>{
 
     useEffect(()=>{
       dispatch(retrieve_boardNames(allBoards))
+      
     },[allBoards])
 
 
@@ -137,7 +161,7 @@ const Sidebar:React.FC=()=>{
            
             <div className="text-secondary font_small">( {board_no} )</div>
              </div>
-             {names_of_boards? names_of_boards.map((nam:string)=>{
+             {names_of_boards? names_of_boards.map((nam:string,index:number)=>{
               return(
                 <div className="d-flex boardTitle_container align-items-center padding_left" onClick={(e)=>{
                  const targ=e.target as HTMLDivElement
@@ -148,7 +172,7 @@ const Sidebar:React.FC=()=>{
                       <svg  viewBox="0 0 24 24" className="boardSplit" xmlns="http://www.w3.org/2000/svg">
                       <path d="M3 6.25C3 4.45507 4.45507 3 6.25 3H17.75C19.5449 3 21 4.45507 21 6.25V17.75C21 19.5449 19.5449 21 17.75 21H6.25C4.45507 21 3 19.5449 3 17.75V6.25ZM4.5 12.5V17.75C4.5 18.7165 5.2835 19.5 6.25 19.5H14V12.5L4.5 12.5ZM14 11V4.5H6.25C5.2835 4.5 4.5 5.2835 4.5 6.25V11L14 11ZM19.5 9.5H15.5V14.5H19.5V9.5ZM19.5 16H15.5V19.5H17.75C18.7165 19.5 19.5 18.7165 19.5 17.75V16ZM19.5 8V6.25C19.5 5.2835 18.7165 4.5 17.75 4.5H15.5V8L19.5 8Z"/>
                       </svg>
-                      <div className="board_title font_small boldFont">{nam}</div>
+                      <div className="board_title font_small boldFont" key={index}>{nam}</div>
                 </div>
           
               )
@@ -185,6 +209,7 @@ const Sidebar:React.FC=()=>{
                       <FontAwesomeIcon icon={faTimes} className="closingTimes" onClick={()=>{
                     refsArray.current.pop()
                     setToggler(!displaytoggler)
+                    
                       }}/>
                     </div>
                      {/* {input? console.log(input):<div className="d-none"></div>} */}
@@ -252,8 +277,9 @@ const Sidebar:React.FC=()=>{
     </div>
     </div>
     : 
-      <FontAwesomeIcon icon={faEye} className="eye_toggler" onClick={()=>{
+      <FontAwesomeIcon icon={faEye} className="eye_toggler" onClick={(e)=>{
         toggle_self()
+        e.stopPropagation()
       }}/> }
     
       

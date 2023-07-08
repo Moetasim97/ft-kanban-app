@@ -1,6 +1,7 @@
 import axios, { AxiosHeaders, AxiosRequestConfig } from "axios"
-
-
+import { UseSelector, useSelector } from "react-redux/es/hooks/useSelector";
+import { useDispatch } from "react-redux";
+import { getBoardColumns } from "./store/actionCreator";
 
 
 const BASE_URL = 'https://api.trello.com/1/';
@@ -10,12 +11,26 @@ axios.defaults.params = {
   token: 'ATTA7fbe378581b3e3637ee5a033ca163478b5b1a81a54d37e55dc01ad74cdf6284f21132A26',
 };
 
+const headers:AxiosRequestConfig={
+  headers:{
+    "Accept":'application/json'
+  }
+}
+
+const otherHeaders:AxiosRequestConfig={
+  headers:{
+    "Accept":'application/json',
+    "Authorization":`Bearer ${axios.defaults.params.token}`
+  }
+}
+
 
  const retrieveAllBoards = async() => {
-
+   
 
     try {
       const response = await axios.get(`members/me/boards`);
+      
       return response.data;
     } catch (error) {
     console.log("The error is in the retrieveallboards",error)
@@ -25,11 +40,11 @@ axios.defaults.params = {
 
 
   const createBoard=async(string:string)=>{
+  
     try{
       const response=await axios.post(`/boards/?name=${string}`)
-      const AfterResponse=await axios.get(`/board/${response.data.id}`)
-      console.log(AfterResponse.data)
-      return AfterResponse.data
+      
+      return response.data
       
     }
     catch(error)
@@ -40,9 +55,10 @@ axios.defaults.params = {
 
 
   const deleteBoard=async(string:string)=>{
+
     
     try{
-      const response=await axios.delete(`/boards/${string}`)
+      const response=await axios.delete(`/boards/${string}`,otherHeaders)
       
       return response.data
       
@@ -54,14 +70,12 @@ axios.defaults.params = {
   }
 
 
-  const headers:AxiosRequestConfig={
-    headers:{
-      "Accept":'application/json'
-    }
-  }
+
 
   const createList= async(boardId:string,listName:string)=>{
+   
     try{
+      console.log(listName)
       const response= await axios.post(`/boards/${boardId}/lists?name=${listName}`,headers)
 
      
@@ -72,20 +86,53 @@ axios.defaults.params = {
     }
   }
 
+
+   
   const retrieveBoardLists= async (boardId:string)=>{
+    
     try{
       const response= await axios.get(`/boards/${boardId}/lists?`,headers)
-      
-      return response.data
+     
+      if(response.data.length<1){
+        response.data=[]
+      }
+ 
+return response.data
     }
     catch(error){
+      console.log(error)
       throw error
+    
+      
     }
+  }
 
   
+
+
   
+  const moveList=async(listId:string,boardId:string)=>{
+    try{
+      const response= await axios.put(`lists/${listId}/idBoard?value=${boardId}`)
+
+    console.log(response.data)
+
+
+    return response.data
+
+
+    }
+
+    catch(error:any){
+      console.log(error.message)
+      throw error
+    }
+    
+
   }
   
 
 
-  export {retrieveAllBoards,createBoard,deleteBoard,createList,retrieveBoardLists}
+
+
+  export {retrieveAllBoards,createBoard,deleteBoard,createList,retrieveBoardLists,moveList}

@@ -12,7 +12,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useEffect } from 'react';
-import { retrieveAllBoards,deleteBoard,retrieveBoardLists } from './TrelloApis';
+import { retrieveAllBoards,deleteBoard,retrieveBoardLists,moveList } from './TrelloApis';
 import { useRef } from 'react';
 import Modal from './Modal';
 import BoardData from './boardData';
@@ -20,9 +20,12 @@ import BoardData from './boardData';
 
 
 
+
+
 const App:React.FC =()=>{
 
   const dispatch=useDispatch()
+  // here I'm defining the selectors that will retrieve the data from my redux store
   const boards=useSelector((store:any)=>store.kanBanReducer.all_boards)
   const board_no=useSelector((store:any)=>store.kanBanReducer.board_no)
   const retrieved_board=useSelector((store:any)=>store.kanBanReducer.current_board_data)
@@ -62,11 +65,8 @@ const App:React.FC =()=>{
     randomToggler((prevState)=>prevState=!prevState)
   }
 
-
+// here I'm handling the feature of the disabled add task button on board columns existing or not
   const taskBtnRef=useRef<HTMLButtonElement>(null)
-
-
-
   var btn_elem=taskBtnRef.current
 
   if(btn_elem!=null && Object.keys(retrieved_board).length<3){
@@ -89,10 +89,12 @@ const App:React.FC =()=>{
     backgroundColor: Theme? '#f4f7fd':'#20212c',
     color: Theme? 'black':'white'
   }
-  const secondaryTheme={
+  const secondaryTheme:{backgroundColor:string}={
     backgroundColor:Theme? 'white':'#2b2c37'
   }
 
+
+  // I'm retrieving all of the my data in this useeffect hook, this should work only on the first render.
   useEffect(()=>{
     const GetAllBoards= async ()=>{
       try {
@@ -108,36 +110,18 @@ const App:React.FC =()=>{
   GetAllBoards()
   },[])
 
+  // This hook is going to calculate the number of boards in order to display the board number selector in
+  // the sidebar
   useEffect(()=>{
     dispatch(calculate_boardsNo(boards))
   },[boards])
 
 
-  
-    
-
-// the getallboards here was part of the body of the function, therefore the getallboards was not defined
-// insidee the body of the useeffect, it was only declared, THis entails that one needs to call any function
-// inside the useeffect hook in order to execute it. the getallboards async function body was declared and defined
-// when it was outside the useeffect hook because async functions need to be executed in order to resolve their
-// promises
-  
- 
-
-
-
-
-  
-  
-
-
-
 
  
 
-const lists=retrieveBoardLists(retrieved_board.id)
-  console.log(retrieved_board.id,lists)
-// dispatch(getBoardColumns(lists))
+
+
 
   return (
     <div className="App" style={MainTheme}>
@@ -161,12 +145,14 @@ const lists=retrieveBoardLists(retrieved_board.id)
            
               </div>
               <div>
+                {/* This button is responsible for toggling the add new task modal */}
                   <button className='logo_button_style boldFont font_small text-white' ref={taskBtnRef} onClick={(e)=>{
                     toggleFirstModal()
                   }}>
                   <FontAwesomeIcon icon={faPlus} className="text-white small_plus" />
                   Add New Task
                   </button>
+                  {/* This icon is responsible for toggling the edit /delete board modal */}
                   <FontAwesomeIcon icon={faEllipsisVertical}  className='text-secondary elipsis  mx-2 px-2' onClick={(e)=>{
                   
                     if(Object.keys(retrieved_board).length<3){
@@ -198,7 +184,6 @@ const lists=retrieveBoardLists(retrieved_board.id)
                           toggleFourthModal()
                           const DeleteThisBoard=async ()=>{
                             try{
-                              debugger;
                               const deletion=await deleteBoard(retrieved_board.id)
                               const newerBoards=await retrieveAllBoards()
                               dispatch(retrieve_initial_boards(newerBoards))
@@ -225,10 +210,16 @@ const lists=retrieveBoardLists(retrieved_board.id)
                     <div className='d-none'></div>
                     }
                     
-            
+            {/* this is the add new task modal */}
            <Modal isOpen={firstmodalState} onClose={toggleFirstModal}>
             <h2>Hi this is the first iteration</h2>
+            <button onClick={()=>{
+              retrieveBoardLists(retrieved_board.id)
+              console.log(retrieved_board.name)
+            }}></button>
            </Modal>
+
+           {/* This is the edit board modal */}
            <Modal isOpen={fifthModalState} onClose={toggleFifthModal}>
             <div className='d-flex flex-column p-3 align-items-start'>
               <div className='boldFont medium_font mb-3'>Edit Board</div>
