@@ -86,6 +86,36 @@ const otherHeaders:AxiosRequestConfig={
     }
   }
 
+  const addTask= async(taskName:string,description:string,listId:string)=>{
+
+    try{
+      const response=await axios.post(`/cards?idList=${listId}&name=${taskName}&desc=${description}`)
+
+      console.log(response)
+      return response.data
+    }
+
+  
+    catch(error){
+      console.log(error)
+      throw error
+    }
+
+    
+  }
+
+  const getListTasks=async(listId:string)=>{
+    try{
+    const taskList=await axios.get(`/lists/${listId}/cards?`)
+    console.log(taskList.data)
+    return taskList.data
+    }
+    catch(error)
+    {
+    throw error
+    }
+  }
+
 
    
   const retrieveBoardLists= async (boardId:string)=>{
@@ -112,7 +142,7 @@ return response.data
 
       const labels=await axios.get(`/boards/${boardId}/labels`)
 
-      console.log(labels.data)
+      
 
       return labels.data
     }
@@ -150,4 +180,4 @@ return response.data
 
 
 
-  export {retrieveAllBoards,createBoard,deleteBoard,createList,retrieveBoardLists,moveList,retrieveAllLabels}
+  export {retrieveAllBoards,createBoard,deleteBoard,createList,retrieveBoardLists,moveList,retrieveAllLabels,addTask,getListTasks}

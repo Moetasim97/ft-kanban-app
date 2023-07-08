@@ -12,7 +12,8 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useEffect } from 'react';
-import { retrieveAllBoards,deleteBoard,retrieveBoardLists,moveList,retrieveAllLabels } from './TrelloApis';
+import { useForm } from 'react-hook-form';
+import { retrieveAllBoards,deleteBoard,retrieveBoardLists,moveList,retrieveAllLabels,addTask} from './TrelloApis';
 import { useRef } from 'react';
 import Modal from './Modal';
 import BoardData from './boardData';
@@ -22,15 +23,20 @@ import BoardData from './boardData';
 
 
 
-const App:React.FC =()=>{
 
+const App:React.FC =()=>{
+type fieldVals={
+  taskName:string,
+  textArea:string,
+  columnPicker:string
+}
   const dispatch=useDispatch()
   // here I'm defining the selectors that will retrieve the data from my redux store
   const genericLabels=((store:any)=>store.kanBanReducer.genericLabels)
   const boards=useSelector((store:any)=>store.kanBanReducer.all_boards)
   const board_no=useSelector((store:any)=>store.kanBanReducer.board_no)
   const retrieved_board=useSelector((store:any)=>store.kanBanReducer.current_board_data)
-  const retrievedBoardCols=useSelector((store:any)=>store.kanBanReducer.currentBoardCols)
+  const retrievedBoardCols=useSelector((store:any)=>store.kanBanReducer.currentBoardColumns)
   const [firstmodalState,setModal]=React.useState<boolean>(false)
   const [secondModalState,setSecondModal]=React.useState<boolean>(false)
   const [thirdModalState,setThirdModal]=React.useState<boolean>(false)
@@ -38,6 +44,7 @@ const App:React.FC =()=>{
   const [randomState,randomToggler]=React.useState<boolean>(false)
   const [fifthModalState,setFifthModal]=React.useState<boolean>(false)
   const editBoardRef=useRef<HTMLInputElement>(null)
+  const {register,formState:{errors},handleSubmit}=useForm<fieldVals>()
 
  
 
@@ -125,6 +132,7 @@ const App:React.FC =()=>{
   useEffect(()=>{
     dispatch(calculate_boardsNo(boards))
   },[boards])
+
 
 
 
@@ -222,12 +230,70 @@ const App:React.FC =()=>{
                     
             {/* this is the add new task modal */}
            <Modal isOpen={firstmodalState} onClose={toggleFirstModal}>
+           <form onSubmit={handleSubmit(
+            (formvals)=>{
+              const taskName=formvals.taskName
+              const taskDescription=formvals.textArea
+              let targetCol: { id: string; };
+              for (var i=0;i<retrievedBoardCols.length;i++){
+                if(retrievedBoardCols[i].name==formvals.columnPicker){
+                  targetCol=retrievedBoardCols[i]
+                }
+              }
+             const taskNew=async()=>{
+              {
+                try{
+                  const task=await addTask(taskName,taskDescription,targetCol.id)
+                  console.log(task)
+                }
+                catch(error){
+                  throw error
+                }
+              }
+            }
+            taskNew()
+          toggleFirstModal()}
+              
             
+           
+            )}>
+            <div className='d-flex flex-column align-items-start p-3'>
+                <div className='boldFont special_style font_small mb-3'>
+                    Add New Task
+                </div>
+               
+                <label htmlFor='taskNameField' className='text-secondary font_small boldFont mb-1'>
+                  Title
+                </label>
+                <input id='taskNameField' className='custom_input mb-2' {...register("taskName",{required:"A full word is required",minLength:{value:5,message:"Minimum length should be at least 5 characters"}})}>
+                
+                </input>
+                {errors.taskName?<label htmlFor="taskNameField" className="errorLabel" >{errors.taskName.message}</label>:<div className="d-none"></div>}
+                <label htmlFor='taskDescField' className='text-secondary font_small boldFont mb-1'>
+                  Description
+                </label>
+                <textarea   className='customDesc mb-2' {...register("textArea",{required:"A full sentence is required",minLength:{value:5,message:"Minimum length should be at least 15 characters"}})} cols={54} rows={4}>sad</textarea>
+                <label htmlFor='columnPicker' className='text-secondary font_small boldFont mb-1'>
+                  Status 
+                </label>
+                <select className='columnSelector mediumFont text-dark' id='columnPicker' {...register("columnPicker")}>
+                {retrievedBoardCols.length>0? retrievedBoardCols.map((column:any,key:number)=>{
+                  return(
+                    <option className='columnOption' value={column.name} key={key}>
+                    {column.name}
+                    </option>)
+                  }):
+                  <>
+                  <option>one option</option>
+                  <option>two option</option>
+                  </>}
+                </select>
+                <button type='submit' className='taskCreator mediumFont p-2 mt-3 font_small'>Create Task</button>
+                
+            </div>
+            </form>
           
-            <button onClick={()=>{
-              retrieveBoardLists(retrieved_board.id)
-              console.log(retrieved_board.name)
-            }}></button>
+            
            </Modal>
 
            {/* This is the edit board modal */}

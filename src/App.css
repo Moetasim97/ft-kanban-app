@@ -94,6 +94,8 @@
   color: gray;
 }
 
+
+
 .coloredLabel{
   width: 14px;
   height: 14px;
@@ -309,6 +311,15 @@ fill: #635fc7;
     padding: 5px;
   }
 
+  .customDesc{
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    height: 100px;
+    width: 416px;
+    padding: 5px;
+    overflow: hidden
+  }
+
   .columnInp{
     border: 1px solid lightslategray;
     border-radius: 5px;
@@ -320,7 +331,25 @@ fill: #635fc7;
     
   }
 
+
+  .columnSelector{
+    width: 416px;
+    border:1px solid lightslategray;
+    padding: 5px;
+    height: 40px;
+    border-radius: 5px;
+    font-size: 15px;
+  }
   
+  .taskCreator{
+    background-color: #635fc7;
+    color: white;
+    border-radius: 20px;
+    width:416px;
+    height: fit-content;
+    border:0;
+    
+  }
 
   .closingTimes{
     width: 20px;
