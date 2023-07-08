@@ -82,7 +82,26 @@
   
   
 }
+.columnContainer{
+  width: 280px;
+  height: fit-content;
+  margin-left: 20px;
 
+}
+
+.columnTitle{
+  letter-spacing: 1px;
+  color: gray;
+}
+
+.coloredLabel{
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-top: 3px;
+  margin-right: 10px;
+  
+}
 .hide_container{
   width: 280px;
   border-top-right-radius: 20px;

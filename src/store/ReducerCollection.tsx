@@ -6,7 +6,7 @@ type actionParams={
 }
 
 const initialState:{boards_names:string[],current_board:object,board_no:number,current_board_data:any
-,all_boards:any[],currentBoardColumns:any[],boardStatus:string}={
+,all_boards:any[],currentBoardColumns:any[],boardStatus:string,genericLabels:any[]}={
 
     boardStatus:"",
     boards_names:[],
@@ -14,7 +14,8 @@ const initialState:{boards_names:string[],current_board:object,board_no:number,c
     current_board:{},
     currentBoardColumns:[],
     current_board_data:{},
-    board_no:0
+    board_no:0,
+    genericLabels:[]
 }
 
 
@@ -72,9 +73,9 @@ const initialState:{boards_names:string[],current_board:object,board_no:number,c
 
     return {...state,currentBoardColumns:action.payload}
 
-    case "Error creating Board":
+    case "Get generic board labels":
 
-    return {...state,boardStatus:action.payload}
+    return {...state,genericLabels:action.payload}
 
 
     default :

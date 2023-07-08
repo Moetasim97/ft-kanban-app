@@ -7,12 +7,12 @@ import {ThemeContext} from "./ThemeContext"
 import {  useSelector } from 'react-redux/es/hooks/useSelector';
 import { Dispatch } from 'react';
 import { useDispatch } from 'react-redux';
-import {calculate_boardsNo,retrieve_current_board,retrieve_initial_boards,BoardDel,afterDeletion,getBoardColumns} from "./store/actionCreator"
+import {calculate_boardsNo,retrieve_current_board,retrieve_initial_boards,BoardDel,afterDeletion,getBoardColumns, retrieve_labels} from "./store/actionCreator"
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useEffect } from 'react';
-import { retrieveAllBoards,deleteBoard,retrieveBoardLists,moveList } from './TrelloApis';
+import { retrieveAllBoards,deleteBoard,retrieveBoardLists,moveList,retrieveAllLabels } from './TrelloApis';
 import { useRef } from 'react';
 import Modal from './Modal';
 import BoardData from './boardData';
@@ -26,9 +26,11 @@ const App:React.FC =()=>{
 
   const dispatch=useDispatch()
   // here I'm defining the selectors that will retrieve the data from my redux store
+  const genericLabels=((store:any)=>store.kanBanReducer.genericLabels)
   const boards=useSelector((store:any)=>store.kanBanReducer.all_boards)
   const board_no=useSelector((store:any)=>store.kanBanReducer.board_no)
   const retrieved_board=useSelector((store:any)=>store.kanBanReducer.current_board_data)
+  const retrievedBoardCols=useSelector((store:any)=>store.kanBanReducer.currentBoardCols)
   const [firstmodalState,setModal]=React.useState<boolean>(false)
   const [secondModalState,setSecondModal]=React.useState<boolean>(false)
   const [thirdModalState,setThirdModal]=React.useState<boolean>(false)
@@ -99,7 +101,11 @@ const App:React.FC =()=>{
     const GetAllBoards= async ()=>{
       try {
           const newBoards = await retrieveAllBoards();
-          
+          if(newBoards.length>1){
+           const getLabels= await retrieveAllLabels(newBoards[0].id)
+          dispatch(retrieve_labels(getLabels))
+          }
+           
           dispatch(retrieve_initial_boards(newBoards))
         
           
@@ -109,7 +115,11 @@ const App:React.FC =()=>{
   }
   GetAllBoards()
   },[])
+ 
 
+
+// going to retrieve genericlabels
+ 
   // This hook is going to calculate the number of boards in order to display the board number selector in
   // the sidebar
   useEffect(()=>{
@@ -212,7 +222,8 @@ const App:React.FC =()=>{
                     
             {/* this is the add new task modal */}
            <Modal isOpen={firstmodalState} onClose={toggleFirstModal}>
-            <h2>Hi this is the first iteration</h2>
+            
+          
             <button onClick={()=>{
               retrieveBoardLists(retrieved_board.id)
               console.log(retrieved_board.name)

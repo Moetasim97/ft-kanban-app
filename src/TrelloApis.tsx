@@ -75,7 +75,7 @@ const otherHeaders:AxiosRequestConfig={
   const createList= async(boardId:string,listName:string)=>{
    
     try{
-      console.log(listName)
+     
       const response= await axios.post(`/boards/${boardId}/lists?name=${listName}`,headers)
 
      
@@ -92,7 +92,7 @@ const otherHeaders:AxiosRequestConfig={
     
     try{
       const response= await axios.get(`/boards/${boardId}/lists?`,headers)
-     
+    
       if(response.data.length<1){
         response.data=[]
       }
@@ -107,6 +107,21 @@ return response.data
     }
   }
 
+  const retrieveAllLabels=async(boardId:string)=>{
+    try{
+
+      const labels=await axios.get(`/boards/${boardId}/labels`)
+
+      console.log(labels.data)
+
+      return labels.data
+    }
+
+    catch(error){
+      throw error
+    }
+  }
+
   
 
 
@@ -115,7 +130,7 @@ return response.data
     try{
       const response= await axios.put(`lists/${listId}/idBoard?value=${boardId}`)
 
-    console.log(response.data)
+    
 
 
     return response.data
@@ -135,4 +150,4 @@ return response.data
 
 
 
-  export {retrieveAllBoards,createBoard,deleteBoard,createList,retrieveBoardLists,moveList}
+  export {retrieveAllBoards,createBoard,deleteBoard,createList,retrieveBoardLists,moveList,retrieveAllLabels}

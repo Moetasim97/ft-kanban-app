@@ -56,6 +56,12 @@ if (!array){
     return {type :"Retrieve All Boards",payload:array}
 }
 
+const retrieve_labels=(labels:any[])=>{
+
+
+    return {type:"Get generic board labels",payload:labels}
+}
+
 const retrieve_boardNames=(array:any[])=>{
     var names=[]
     if(array.length>0){
@@ -119,11 +125,7 @@ const retrieve_current_board=(name:string | null,array:any[])=>{
 
 }
 
-const addBoard=(array:any[],obj:object)=>{
 
-    array.push(obj)
-    return { type:"Add Board",payload:array}
-}
 
 
 const BoardDel=(array:any[],string:string)=>{
@@ -166,7 +168,7 @@ return {type:"Retrieve columns of the current Board",payload:array}
 
 
 
-export {calculate_boardsNo,retrieve_current_board,retrieve_initial_boards,retrieve_boardNames,addBoard,BoardDel,afterDeletion,getBoardColumns}
+export {calculate_boardsNo,retrieve_current_board,retrieve_initial_boards,retrieve_boardNames,BoardDel,afterDeletion,getBoardColumns,retrieve_labels}
 
 
 // const createABoard=(stri):ThunkAction<Promise<void>,RootState:object, stri:,actionTypes: any>=>{
