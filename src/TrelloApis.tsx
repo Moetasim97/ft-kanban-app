@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { getBoardColumns } from "./store/actionCreator";
 
 
+
 const BASE_URL = 'https://api.trello.com/1/';
 axios.defaults.baseURL = BASE_URL;
 axios.defaults.params = {
@@ -112,7 +113,8 @@ const otherHeaders:AxiosRequestConfig={
     }
     catch(error)
     {
-    throw error
+      
+    console.log(error)
     }
   }
 
@@ -189,9 +191,9 @@ return response.data
     const response=await axios.delete(`/cards/${cardId}`)
   }
 
-  catch(error){
-    throw error
-  }
+  catch(error:any){
+  return error.message  
+}
   }
   
 

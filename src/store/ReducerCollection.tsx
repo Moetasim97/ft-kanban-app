@@ -6,7 +6,7 @@ type actionParams={
 }
 
 const initialState:{boards_names:string[],current_board:object,board_no:number,current_board_data:any
-,all_boards:any[],currentBoardColumns:any[],boardStatus:string,genericLabels:any[],addingTasks:boolean}={
+,all_boards:any[],currentBoardColumns:any[],boardStatus:string,genericLabels:any[],addingTasks:boolean,taskStatus:string}={
 
     boardStatus:"",
     boards_names:[],
@@ -17,6 +17,7 @@ const initialState:{boards_names:string[],current_board:object,board_no:number,c
     board_no:0,
     genericLabels:[],
     addingTasks:false,
+    taskStatus:'',
 }
 
 
@@ -82,6 +83,10 @@ const initialState:{boards_names:string[],current_board:object,board_no:number,c
 
 
     return {...state,addingTasks:action.payload}
+
+    case "error in task loading":
+
+    return {...state,taskStatus:action.payload}
 
 
     default :

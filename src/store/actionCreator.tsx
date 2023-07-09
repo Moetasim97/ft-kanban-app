@@ -157,61 +157,18 @@ const toggleTaskModal=(value:boolean)=>{
 }
 
 
+const errorLoadingTask=(status:string)=>{
+
+
+    return {type:"error in task loading",payload:status}
+}
 
 
 
 
-// export const initialAction = (array:any[]) => {
-//     return (dispatch:any) => {
-//       // Dispatch the initial action
-//       dispatch(retrieve_initial_boards(array));
-  
-//       // Perform any asynchronous operations if needed
-//       // ...
-  
-//       // Dispatch the follow-up action
-//       dispatch();
-//     };
-//   };
 
 
 
 
-export {calculate_boardsNo,retrieve_current_board,retrieve_initial_boards,retrieve_boardNames,BoardDel,afterDeletion,getBoardColumns,retrieve_labels,toggleTaskModal}
+export {calculate_boardsNo,retrieve_current_board,retrieve_initial_boards,retrieve_boardNames,BoardDel,afterDeletion,getBoardColumns,retrieve_labels,toggleTaskModal,errorLoadingTask}
 
-
-// const createABoard=(stri):ThunkAction<Promise<void>,RootState:object, stri:,actionTypes: any>=>{
-
-
-//     return async(dispatch:any)=>{
-
-//     try{
-
-//         const theBoard=await createBoard(string)
-
-//         dispatch({type:"Board Created Successfully",payload:theBoard})
-        
-//         const theLists= await retrieveBoardLists(theBoard.id)
-
-//         dispatch({type:"Will retrieve lists"})
-
-//         theLists.length>0? theLists.map(async (list:any,key:any)=>{
-//         const listWillDelete=await deleteList(list)
-//         dispatch({type:"Default list deleted"})
-//         }) : console.log("nothing")
-
-
-//         const afterDelete=await retrieveBoardLists(theBoard.id)
-//         console.log(afterDelete)
-//         dispatch({type:"Lists after reseting",payload:afterDelete})
-    
-
-    
-//     }
-
-//     catch(error:any){
-        
-//         return {type:"Error creating Board",payload:error.message}
-//     }
-// }
-// }
