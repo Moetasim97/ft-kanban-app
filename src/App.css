@@ -398,6 +398,26 @@ fill: #635fc7;
   height: fit-content;
 }
 
+.taskSettings{
+  position: absolute;
+  top:150px;
+  padding: 5px;
+  right: 200px;
+  z-index: 100;
+  width: 150px;
+  height: fit-content;
+  border-radius: 10px;
+  border: 0;
+}
+
+.taskSettingsElement{
+  border: 0;
+  background-color: inherit;
+  border-radius: 5px;
+
+}
+
+
 .settingsElement{
   cursor: pointer;
   margin: 3px;
@@ -448,4 +468,15 @@ fill: #635fc7;
 .special_margins{
   margin-left: 300px;
   margin-top: 150px;
+}
+
+.elip{
+  cursor: pointer;
+}
+.taskContainer{
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  width: 100%;
+  height: fit-content;
+  border-radius: 5px;
+  margin-bottom: 10px;
 }
