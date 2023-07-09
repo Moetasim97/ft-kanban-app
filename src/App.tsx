@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import {calculate_boardsNo,retrieve_current_board,retrieve_initial_boards,BoardDel,afterDeletion,getBoardColumns, retrieve_labels,toggleTaskModal} from "./store/actionCreator"
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -17,6 +18,7 @@ import { retrieveAllBoards,deleteBoard,retrieveBoardLists,moveList,retrieveAllLa
 import { useRef } from 'react';
 import Modal from './Modal';
 import BoardData from './boardData';
+import BoardEditing from './EditBoard';
 
 
 
@@ -46,6 +48,8 @@ type fieldVals={
   const [fifthModalState,setFifthModal]=React.useState<boolean>(false)
   const editBoardRef=useRef<HTMLInputElement>(null)
   const {register,formState:{errors},handleSubmit}=useForm<fieldVals>()
+  const refsArray=useRef<Array<React.RefObject<HTMLInputElement>>>([])
+  
 
  
 
@@ -75,15 +79,20 @@ type fieldVals={
     randomToggler((prevState)=>prevState=!prevState)
   }
 
+  const addRef=()=>{
+
+    refsArray.current.push(React.createRef<HTMLInputElement>())
+  }
+
 // here I'm handling the feature of the disabled add task button on board columns existing or not
   const taskBtnRef=useRef<HTMLButtonElement>(null)
   var btn_elem=taskBtnRef.current
 
-  if(btn_elem!=null && Object.keys(retrieved_board).length<3){
+  if(btn_elem!=null && retrievedBoardCols.length<1){
     btn_elem.disabled=true
     btn_elem.style.backgroundColor="#d8d7f1"
   }
-  else if(btn_elem!=null && Object.keys(retrieved_board).length>0){
+  else if(btn_elem!=null && retrievedBoardCols.length>0){
     btn_elem.disabled=false
     btn_elem.style.backgroundColor="#635fc7"
   }
@@ -308,21 +317,7 @@ type fieldVals={
 
            {/* This is the edit board modal */}
            <Modal isOpen={fifthModalState} onClose={toggleFifthModal}>
-            <div className='d-flex flex-column p-3 align-items-start'>
-              <div className='boldFont medium_font mb-3'>Edit Board</div>
-              <label htmlFor='editBoardInput' className='text-secondary mx-1 mb-1 font_small boldFont' >Board Name</label>
-              <input type='text' id='editBoardInput' className='boardEdit mb-3 custom_input' placeholder={retrieved_board.name} ref={editBoardRef}></input>
-              <label htmlFor='anotherColInput' className='text-secondary  mx-1 font_small boldFont'>Board Columns</label>
-              <button className="boardButtons boldFont mb-4" id="special_treatment" style={buttonTheme}>
-              <FontAwesomeIcon icon={faPlus} className="  small_plus "/>
-              Add New Column
-              </button>
-              <button className="boardButtons mediumFont" id="" onClick={()=>{
-                retrieveBoardLists(retrieved_board.id)
-                }}>
-                    Save Changes
-              </button>
-            </div>
+            <BoardEditing/>
            </Modal>
 
           </div>

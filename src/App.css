@@ -280,7 +280,8 @@ fill: #635fc7;
     width:100%;
     z-index: 10;
     top:0;
-    left:0
+    left:0;
+    overflow: scroll;
   }
 
   .modal_content{
@@ -366,6 +367,7 @@ fill: #635fc7;
 
   input::placeholder{
     font-size: 14px;
+    color: black;
 
   }
 
