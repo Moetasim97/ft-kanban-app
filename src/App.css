@@ -35,6 +35,8 @@
   background-color: #f4f7fd;
   min-height: 100%;
   max-height: 120%;
+  width: 100%;
+ 
 
 }
 
@@ -490,8 +492,27 @@ fill: #635fc7;
   height: fit-content;
   border-radius: 5px;
   margin-bottom: 10px;
+
 }
 
 .taskPara{
   text-align: start;
+}
+
+
+.lgColumnButton{
+
+  width: 280px;
+  height:470px;
+  border-radius: 15px;
+  margin: 10px;
+  padding-top: 210px;
+  cursor: pointer;
+}
+
+.columnBtnTitle{
+  background-color: inherit;
+}
+.columnBtnTitle:hover{
+  color: #635fc7;
 }

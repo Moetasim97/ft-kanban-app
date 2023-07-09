@@ -100,7 +100,7 @@ type fieldVals={
 
  
 
-  const Theme:boolean=useContext(ThemeContext)
+    const Theme:boolean=useContext(ThemeContext)
   const buttonTheme={
     backgroundColor: Theme? '#d8d7f1':'white'
    }
@@ -109,6 +109,9 @@ type fieldVals={
     color: Theme? 'black':'white'
   }
   const secondaryTheme:{backgroundColor:string}={
+    backgroundColor:Theme? 'white':'#2b2c37'
+  }
+  const inputTheme={
     backgroundColor:Theme? 'white':'#2b2c37'
   }
 
@@ -276,7 +279,7 @@ type fieldVals={
             
            
             )}>
-            <div className='d-flex flex-column align-items-start p-3'>
+            <div className='d-flex flex-column align-items-start p-3' style={secondaryTheme}>
                 <div className='boldFont special_style font_small mb-3'>
                     Add New Task
                 </div>
@@ -284,18 +287,18 @@ type fieldVals={
                 <label htmlFor='taskNameField' className='text-secondary font_small boldFont mb-1'>
                   Title
                 </label>
-                <input id='taskNameField' className='custom_input mb-2' {...register("taskName",{required:"A full word is required",minLength:{value:5,message:"Minimum length should be at least 5 characters"}})}>
+                <input id='taskNameField' className='custom_input mb-2' style={inputTheme} {...register("taskName",{required:"A full word is required",minLength:{value:5,message:"Minimum length should be at least 5 characters"}})}>
                 
                 </input>
                 {errors.taskName?<label htmlFor="taskNameField" className="errorLabel" >{errors.taskName.message}</label>:<div className="d-none"></div>}
                 <label htmlFor='taskDescField' className='text-secondary font_small boldFont mb-1'>
                   Description
                 </label>
-                <textarea   className='customDesc mb-2' {...register("textArea",{required:"A full sentence is required",minLength:{value:5,message:"Minimum length should be at least 15 characters"}})} cols={54} rows={4}>sad</textarea>
+                <textarea style={inputTheme}  className='customDesc mb-2' {...register("textArea",{required:"A full sentence is required",minLength:{value:5,message:"Minimum length should be at least 15 characters"}})} cols={54} rows={4}>sad</textarea>
                 <label htmlFor='columnPicker' className='text-secondary font_small boldFont mb-1'>
                   Status 
                 </label>
-                <select className='columnSelector mediumFont text-dark' id='columnPicker' {...register("columnPicker")}>
+                <select className='columnSelector mediumFont ' style={inputTheme} id='columnPicker' {...register("columnPicker")}>
                 {retrievedBoardCols.length>0? retrievedBoardCols.map((column:any,key:number)=>{
                   return(
                     <option className='columnOption' value={column.name} key={key}>

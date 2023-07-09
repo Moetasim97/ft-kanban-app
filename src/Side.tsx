@@ -20,6 +20,12 @@ type FormValues={
 
 // This function is going to handle the submit of the add new board modal
 const Sidebar:React.FC=()=>{
+  const Theme:boolean=useContext(ThemeContext)
+  
+  const MainTheme:{backgroundColor:string,color:string}={
+    backgroundColor: Theme? '#f4f7fd':'#20212c',
+    color: Theme? 'black':'white'
+  }
 
   const currentBoardCols=useSelector((store:any)=>store.kanBanReducer.currentBoardCols)
 
@@ -90,7 +96,7 @@ const Sidebar:React.FC=()=>{
     
   }
     const themeSetter:Dispatch<SetStateAction<boolean>>=useContext(AnotherContext)
-    const Theme:boolean=useContext(ThemeContext)
+ 
     const primaryTheme={
         backgroundColor:Theme? 'white':'#2b2c37'
     }
@@ -98,7 +104,7 @@ const Sidebar:React.FC=()=>{
        backgroundColor:Theme ? '#f4f7fd':'#20212c'
      }
     const inputTheme={
-      backgroundColor:Theme? 'white':'#20212c'
+      backgroundColor:Theme? 'white':'#2b2c37'
     }
      const buttonTheme={
       backgroundColor:Theme? '#d8d7f1':'white'
@@ -213,7 +219,7 @@ const Sidebar:React.FC=()=>{
                   return(
                     <>
                     <div className="d-flex align-items-baseline">
-                      <input type="text" id="columnBoardInput" className="columnInp"  ref={input}></input>
+                      <input type="text" id="columnBoardInput" className="columnInp" style={inputTheme}  ref={input}></input>
                      
                       <FontAwesomeIcon icon={faTimes} className="closingTimes" onClick={()=>{
                     refsArray.current.pop()

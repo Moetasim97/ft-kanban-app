@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux"
 import { errorLoadingTask } from "./store/actionCreator"
 import Modal from "./Modal"
 import Task from "./Task"
+import BoardData from "./boardData"
 
 
 
@@ -19,12 +20,14 @@ type props={
 const Column:React.FC<props>=({integer,column})=>{
 
     const dispatch=useDispatch()
+    const tasksStatus=useSelector((store:any)=>store.kanbb)
     const taskLoadingStatus=useSelector((store:any)=>store.kanBanReducer.taskStatus)
     const [taskArray,setArray]=React.useState<[]>([])
     const [singleModal,setModal]=React.useState<boolean>(false)
     const labels=useSelector((store:any)=>store.kanBanReducer.genericLabels)
     const refreshBoolean=useSelector((store:any)=>store.kanBanReducer.addingTasks)
     const currentBoard=useSelector((store:any)=>store.kanBanReducer.current_board_data)
+    const currentBoardColumns=useSelector((store:any)=>store.kanBanReducer.currentBoardColumns)
     
 
     useEffect(()=>{
@@ -49,8 +52,7 @@ const Column:React.FC<props>=({integer,column})=>{
         dispatch(errorLoadingTask(error.message))
        
        }
-        
-    
+    console.log(taskArray)    
   
 
 

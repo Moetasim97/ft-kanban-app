@@ -9,9 +9,13 @@ import { useDispatch } from "react-redux"
 import Column from "./SingleCol"
 import BoardEditing from "./EditBoard"
 import Modal from "./Modal"
+import { useContext } from "react"
+import { ThemeContext } from "./ThemeContext"
 
 
 const BoardData:React.FC=()=>{
+    const Theme:boolean=useContext(ThemeContext)
+ 
 
     const dispatch=useDispatch()
     const labels=useSelector((store:any)=>store.kanBanReducer.genericLabels)
@@ -19,7 +23,21 @@ const BoardData:React.FC=()=>{
     const boardTarget=useSelector((store:any)=>store.kanBanReducer.current_board_data)
     const [editBoardModal,setEditBoardModal]=React.useState<boolean>(false)
 
+   
+    const buttonTheme={
+      backgroundColor: Theme? '#d8d7f1':'white'
+     }
+    const MainTheme:{backgroundColor:string,color:string}={
+      backgroundColor: Theme? '#f4f7fd':'#20212c',
+      color: Theme? 'black':'white'
+    }
+    const secondaryTheme:{backgroundColor:string}={
+      backgroundColor:Theme? 'white':'#2b2c37'
+    }
 
+    const specialTheme:{backgroundColor:string}={
+        backgroundColor:Theme? '#edf2fb':'#2b2c37'
+    }
 console.log(boardColumns)
 
 useEffect(()=>{
@@ -35,7 +53,7 @@ useEffect(()=>{
     }
     targetColumns()
     
-},[boardTarget,boardColumns])
+},[boardTarget])
 
 
 
@@ -67,7 +85,8 @@ const toggleEditModal=()=>{
             return(
             <Column integer={num} column={column}/>
             )
-        }):
+        })
+        :
         <div className="d-none"></div>}
 
     </div>

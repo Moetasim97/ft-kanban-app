@@ -10,40 +10,6 @@ import { create } from "domain"
 
 
 
-const BOARD_CREATE_SUCCESS="BOARD CREATE SUCCESS"
-const BOARD_RETRIEVE_LISTS="BOARD RETRIEVE LISTS"
-const DEFAULT_LIST_DELETED="DEFAULT LIST DELETED"
-const LISTS_AFTER_RESETING="LISTS AFTER RESETING"
-const BOARD_CREATE_FAILRE="BOARD FAILED TO GET CREATED"
-
-interface boardCreateSuccess
-{
-type:string,
-payload:object
-}
-interface boardRetrieveLists
-{
-    type:string
-
-}
-interface defaultListDeleted
-{
-    type:string,
-    payload:any[]
-}
-interface listsAfterReseting
-{
-    type:string,
-    payload:any[]
-}
-
-type actionTypes=
-    | boardCreateSuccess
-    | boardRetrieveLists
-    | defaultListDeleted
-    | listsAfterReseting;
-
-
 
 
 

@@ -8,12 +8,14 @@ import { useContext } from "react";
 import { useDispatch } from "react-redux";
 import { toggleTaskModal,retrieve_current_board } from "./store/actionCreator";
 import {moveTask,deleteTask} from "./TrelloApis"
+import { ThemeContext } from "./ThemeContext";
 type props={
     state:any
     taskNo:number
 }
 
 const Task:React.FC<props>=({state,taskNo})=>{
+    const Theme:boolean=useContext(ThemeContext)
 
     const dispatch=useDispatch()
     const boards=useSelector((store:any)=>store.kanBanReducer.all_boards)
@@ -25,6 +27,15 @@ const Task:React.FC<props>=({state,taskNo})=>{
 const [modalState,setModalState]=React.useState<boolean>(false)
 const [miniModal,setMiniModal]=React.useState<boolean>(false)
 
+
+const MainTheme:{backgroundColor:string,color:string}={
+    backgroundColor: Theme? 'white':'#2b2c37',
+    color: Theme? 'black':'white'
+  }
+  const inputTheme={
+    backgroundColor:Theme? 'white':'#2b2c37',
+    color: Theme? 'black':'white'
+  }
 const toggleModal=()=>{
 
     setModalState(!modalState)
@@ -39,8 +50,8 @@ const toggleMini=()=>{
 
     return(
         <>
-      <div className="taskContainer border d-flex flex-column p-2 bg-white align-items-start p-3 pb-4" onClick={toggleModal}>
-                    <div className="text-dark boldFont font_medium">
+      <div className="taskContainer d-flex flex-column p-2 align-items-start p-3 pb-4" style={MainTheme} onClick={toggleModal}>
+                    <div className=" boldFont font_medium">
                         {state.name}
                     </div>
                     
@@ -50,9 +61,9 @@ const toggleMini=()=>{
                         toggleModal()
                         setMiniModal(false)
                     }}>
-                        <div className="d-flex flex-column p-3 align-items-start">
+                        <div className="d-flex flex-column p-3 align-items-start" style={MainTheme}>
                             <div className="d-flex justify-content-between align-items-center w-100 mb-2">
-                            <div className="text-dark boldFont font_medium">
+                            <div className=" boldFont font_medium">
                                 {state.name}
                             </div>
                             <FontAwesomeIcon icon={faEllipsisVertical} className=" text-secondary p-2 elip" onClick={toggleMini}/>
@@ -63,7 +74,7 @@ const toggleMini=()=>{
                             <label htmlFor="columnStatus " className="text-secondary boldFont font_small mb-2">
                                 Current Status
                             </label>
-                            <select className="columnSelector" {...register("taskCol")}>
+                            <select style={inputTheme} className="columnSelector" {...register("taskCol")}>
                                 {boardCols?boardCols.map((column:any,index:number)=>{
                                     return(<option>
                                         {column.name}
