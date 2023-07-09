@@ -7,6 +7,8 @@ import { retrieveBoardLists } from "./TrelloApis"
 import { getBoardColumns } from "./store/actionCreator"
 import { useDispatch } from "react-redux"
 import Column from "./SingleCol"
+import BoardEditing from "./EditBoard"
+import Modal from "./Modal"
 
 
 const BoardData:React.FC=()=>{
@@ -15,8 +17,9 @@ const BoardData:React.FC=()=>{
     const labels=useSelector((store:any)=>store.kanBanReducer.genericLabels)
     const boardColumns=useSelector((store:any)=>store.kanBanReducer.currentBoardColumns)
     const boardTarget=useSelector((store:any)=>store.kanBanReducer.current_board_data)
+    const [editBoardModal,setEditBoardModal]=React.useState<boolean>(false)
 
-const [displayToggle,displayToggler]=React.useState<boolean>(false)
+
 console.log(boardColumns)
 
 useEffect(()=>{
@@ -36,6 +39,9 @@ useEffect(()=>{
 
 
 
+const toggleEditModal=()=>{
+    setEditBoardModal(!editBoardModal)
+}
     return (<>
 
     {boardColumns.length<1?
@@ -43,11 +49,15 @@ useEffect(()=>{
     <div className=" special_margins  d-flex flex-column align-items-center">
     <div className="text-secondary boldFont mb-4">This board is empty. Create a new column to get started</div>
     <button className="logo_button_style text-white boldFont font_medium" onClick={()=>{
-        displayToggler(!displayToggle)
+      toggleEditModal()
     }}>
-    <FontAwesomeIcon icon={faPlus} className="text-white small_plus" />
+    <FontAwesomeIcon icon={faPlus} className="text-white small_plus" onClick={()=>{
+
+    }}/>
         Add New Column</button>
-   
+   <Modal isOpen={editBoardModal} onClose={toggleEditModal}>
+    <BoardEditing/>
+   </Modal>
     </div>
     </>
     : <div className="d-flex">

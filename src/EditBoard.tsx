@@ -8,7 +8,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import {ThemeContext} from "./ThemeContext"
 import {useContext} from "react"
 import { useEffect } from 'react';
-import { createBoard,moveList,deleteBoard,createList, retrieveAllBoards } from "./TrelloApis";
+import { createBoard,moveList,deleteBoard,createList, retrieveAllBoards,retrieveBoardLists } from "./TrelloApis";
 
 
 
@@ -149,6 +149,7 @@ const BoardEditing:React.FC=()=>{
                     newColumns.map(async (value:string)=>{
                       
                       const newList=await createList(retrieved_board.id,value)
+                      const retrieveLists=await retrieveBoardLists(retrieved_board.id)
                       })
                       toggleState(!togglingState)
                 }
