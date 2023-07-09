@@ -151,6 +151,15 @@ return {type:"Retrieve columns of the current Board",payload:array}
 
 }
 
+const toggleTaskModal=(value:boolean)=>{
+
+    return {type:"Toggle Tasks", payload:value}
+}
+
+
+
+
+
 
 // export const initialAction = (array:any[]) => {
 //     return (dispatch:any) => {
@@ -168,7 +177,7 @@ return {type:"Retrieve columns of the current Board",payload:array}
 
 
 
-export {calculate_boardsNo,retrieve_current_board,retrieve_initial_boards,retrieve_boardNames,BoardDel,afterDeletion,getBoardColumns,retrieve_labels}
+export {calculate_boardsNo,retrieve_current_board,retrieve_initial_boards,retrieve_boardNames,BoardDel,afterDeletion,getBoardColumns,retrieve_labels,toggleTaskModal}
 
 
 // const createABoard=(stri):ThunkAction<Promise<void>,RootState:object, stri:,actionTypes: any>=>{

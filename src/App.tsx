@@ -7,7 +7,7 @@ import {ThemeContext} from "./ThemeContext"
 import {  useSelector } from 'react-redux/es/hooks/useSelector';
 import { Dispatch } from 'react';
 import { useDispatch } from 'react-redux';
-import {calculate_boardsNo,retrieve_current_board,retrieve_initial_boards,BoardDel,afterDeletion,getBoardColumns, retrieve_labels} from "./store/actionCreator"
+import {calculate_boardsNo,retrieve_current_board,retrieve_initial_boards,BoardDel,afterDeletion,getBoardColumns, retrieve_labels,toggleTaskModal} from "./store/actionCreator"
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -32,11 +32,12 @@ type fieldVals={
 }
   const dispatch=useDispatch()
   // here I'm defining the selectors that will retrieve the data from my redux store
-  const genericLabels=((store:any)=>store.kanBanReducer.genericLabels)
+  const genericLabels=useSelector((store:any)=>store.kanBanReducer.genericLabels)
   const boards=useSelector((store:any)=>store.kanBanReducer.all_boards)
   const board_no=useSelector((store:any)=>store.kanBanReducer.board_no)
   const retrieved_board=useSelector((store:any)=>store.kanBanReducer.current_board_data)
   const retrievedBoardCols=useSelector((store:any)=>store.kanBanReducer.currentBoardColumns)
+  const refreshBoolean=useSelector((store:any)=>store.kanBanReducer.addingTasks)
   const [firstmodalState,setModal]=React.useState<boolean>(false)
   const [secondModalState,setSecondModal]=React.useState<boolean>(false)
   const [thirdModalState,setThirdModal]=React.useState<boolean>(false)
@@ -134,6 +135,8 @@ type fieldVals={
   },[boards])
 
 
+  
+
 
 
  
@@ -165,7 +168,10 @@ type fieldVals={
               <div>
                 {/* This button is responsible for toggling the add new task modal */}
                   <button className='logo_button_style boldFont font_small text-white' ref={taskBtnRef} onClick={(e)=>{
+                       
                     toggleFirstModal()
+              
+                  
                   }}>
                   <FontAwesomeIcon icon={faPlus} className="text-white small_plus" />
                   Add New Task
@@ -244,7 +250,7 @@ type fieldVals={
               {
                 try{
                   const task=await addTask(taskName,taskDescription,targetCol.id)
-                  console.log(task)
+                  dispatch(toggleTaskModal(!refreshBoolean))
                 }
                 catch(error){
                   throw error
@@ -252,7 +258,11 @@ type fieldVals={
               }
             }
             taskNew()
-          toggleFirstModal()}
+            
+          
+          toggleFirstModal()
+         
+          }
               
             
            

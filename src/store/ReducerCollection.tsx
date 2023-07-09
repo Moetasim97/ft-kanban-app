@@ -6,7 +6,7 @@ type actionParams={
 }
 
 const initialState:{boards_names:string[],current_board:object,board_no:number,current_board_data:any
-,all_boards:any[],currentBoardColumns:any[],boardStatus:string,genericLabels:any[]}={
+,all_boards:any[],currentBoardColumns:any[],boardStatus:string,genericLabels:any[],addingTasks:boolean}={
 
     boardStatus:"",
     boards_names:[],
@@ -15,7 +15,8 @@ const initialState:{boards_names:string[],current_board:object,board_no:number,c
     currentBoardColumns:[],
     current_board_data:{},
     board_no:0,
-    genericLabels:[]
+    genericLabels:[],
+    addingTasks:false,
 }
 
 
@@ -76,6 +77,11 @@ const initialState:{boards_names:string[],current_board:object,board_no:number,c
     case "Get generic board labels":
 
     return {...state,genericLabels:action.payload}
+
+    case "Toggle Tasks":
+
+
+    return {...state,addingTasks:action.payload}
 
 
     default :
