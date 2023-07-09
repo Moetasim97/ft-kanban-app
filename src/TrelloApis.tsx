@@ -91,7 +91,7 @@ const otherHeaders:AxiosRequestConfig={
     try{
       const response=await axios.post(`/cards?idList=${listId}&name=${taskName}&desc=${description}`)
 
-      console.log(response)
+      
       return response.data
     }
 
@@ -107,7 +107,7 @@ const otherHeaders:AxiosRequestConfig={
   const getListTasks=async(listId:string)=>{
     try{
     const taskList=await axios.get(`/lists/${listId}/cards?`)
-    console.log(taskList.data)
+    
     return taskList.data
     }
     catch(error)
@@ -152,6 +152,17 @@ return response.data
     }
   }
 
+  const moveTask=async(cardId:string,columnId:string)=>{
+    try{
+      const response=axios.put(`/cards/${cardId}?idList=${columnId}`)
+    console.log(response)
+    }
+    catch(error)
+    {
+      throw error
+    }
+  }
+
   
 
 
@@ -159,10 +170,7 @@ return response.data
   const moveList=async(listId:string,boardId:string)=>{
     try{
       const response= await axios.put(`lists/${listId}/idBoard?value=${boardId}`)
-
-    
-
-
+      
     return response.data
 
 
@@ -175,9 +183,19 @@ return response.data
     
 
   }
+
+  const deleteTask= async(cardId:string)=>{
+    try{
+    const response=await axios.delete(`/cards/${cardId}`)
+  }
+
+  catch(error){
+    throw error
+  }
+  }
   
 
 
 
 
-  export {retrieveAllBoards,createBoard,deleteBoard,createList,retrieveBoardLists,moveList,retrieveAllLabels,addTask,getListTasks}
+  export {retrieveAllBoards,createBoard,deleteBoard,createList,retrieveBoardLists,moveList,retrieveAllLabels,addTask,getListTasks,moveTask,deleteTask}

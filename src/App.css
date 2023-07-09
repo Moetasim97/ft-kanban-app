@@ -399,14 +399,14 @@ fill: #635fc7;
 }
 
 .taskSettings{
-  position: absolute;
-  top:150px;
+  position: fixed;
+  top:175px;
   padding: 5px;
-  right: 200px;
+  right: 385px;
   z-index: 100;
-  width: 150px;
+  width: 160px;
   height: fit-content;
-  border-radius: 10px;
+  border-radius: 5px;
   border: 0;
 }
 
@@ -417,11 +417,19 @@ fill: #635fc7;
 
 }
 
+.taskSettingsElement:hover{
+  background-color: lightblue;
+  border-radius: 5px;
+}
+
 
 .settingsElement{
   cursor: pointer;
   margin: 3px;
 }
+
+
+
 .settingsElement:hover{
   background-color: #d8d7f1;
   border-radius: 5px;
@@ -473,10 +481,15 @@ fill: #635fc7;
 .elip{
   cursor: pointer;
 }
+
 .taskContainer{
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   width: 100%;
   height: fit-content;
   border-radius: 5px;
   margin-bottom: 10px;
+}
+
+.taskPara{
+  text-align: start;
 }
